@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Apply for Coaching | GrowwCoaching</title>
+    <title>Apply for Coaching | DoneCoaching</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,7 +25,7 @@
             padding: 0;
         }
 
-        /* === GROWWCOACHING THEME VARIABLES === */
+        /* === DoneCoaching THEME VARIABLES === */
         :root {
             --bg-color: #f4f5f4;
             --bg-card: #FFFFFF; 
@@ -308,7 +308,7 @@
 
         <div class="auth-logo">
             <a href="index.html" class="text-2xl font-black tracking-tighter " style="text-decoration: none;">
-                GrowwCoaching
+                DoneCoaching
             </a>
         </div>
 
@@ -342,11 +342,20 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="password">Create Password</label>
-                <div class="input-wrapper">
-                    <input type="password" id="password" class="input-field" placeholder="••••••••" required>
-                    <i class="fas fa-lock input-icon"></i>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="input-field" placeholder="••••••••" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmPassword" class="input-field" placeholder="••••••••" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
                 </div>
             </div>
 
@@ -420,6 +429,16 @@
         // --- FORM SUBMISSION ---
         document.getElementById('register-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            // Validate Passwords
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return; // Stop submission
+            }
+
             // Redirects to user dashboard after successful "registration"
             window.location.href = 'user.html';
         });

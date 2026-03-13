@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard | GrowwCoaching</title>
+    <title>Client Dashboard | DoneCoaching</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -49,7 +49,7 @@
             --dash-bg: #f4f4f5; 
             --text-main: #000000; 
             --text-muted: #555555;
-            --accent-color: #10B981; /* Emerald */
+            --accent-color: #10B981; 
             --accent-dark: #059669;  
             --border-color: #e5e5e5;
             --sidebar-width: 280px;
@@ -67,7 +67,7 @@
             --border-color: #262626;
             --card-bg: #171717;
             --card-hover: #1f1f1f;
-            --accent-color: #A3E635; /* Lime for dark mode */
+            --accent-color: #A3E635; 
             --accent-dark: #10B981;
             --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
             --shadow-hover: 0 10px 25px -5px rgba(163, 230, 53, 0.15);
@@ -178,6 +178,7 @@
             border-radius: 8px; 
             margin-bottom: 4px;
             transition: all 0.2s;
+            cursor: pointer;
         }
         
         .nav-item i { width: 24px; font-size: 1.1rem; text-align: center; margin-right: 14px; transition: transform 0.2s; }
@@ -284,6 +285,14 @@
         .chat-bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; max-width: 85%; }
         .chat-editor { background: var(--dash-bg); color: var(--text-main); border-bottom-left-radius: 2px; }
         .chat-author { background: var(--accent-color); color: #000; border-bottom-right-radius: 2px; margin-left: auto; }
+        
+        /* VIDEO CARDS */
+        .video-thumb { background: #000; border-radius: 8px; overflow: hidden; position: relative; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .video-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: opacity 0.3s; }
+        .video-thumb:hover img { opacity: 0.9; }
+        .video-thumb i { position: absolute; font-size: 3rem; color: rgba(255,255,255,0.8); transition: transform 0.3s; z-index: 10; }
+        .video-thumb:hover i { transform: scale(1.1); color: #fff; }
+        .duration-badge { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; z-index: 10; }
     </style>
 </head>
 <body>
@@ -293,28 +302,36 @@
     <aside class="sidebar" id="sidebar">
         <div class="mb-12 px-4">
             <a href="index.html" class="text-2xl font-black tracking-tighter block" style="color: var(--text-main); text-decoration: none;">
-                GrowwCoaching
+                DoneCoaching
             </a>
         </div>
         
         <nav class="flex-grow">
             <p class="text-xs font-bold uppercase tracking-widest mb-3 px-4" style="color: var(--text-muted);">Workspace</p>
-            <a href="user.html" class="nav-item active"><i class="fas fa-columns"></i> Dashboard</a>
             
-            <a href="#" class="nav-item">
+            <a href="#" id="nav-dashboard" class="nav-item active" onclick="showSection('dashboard'); return false;">
+                <i class="fas fa-columns"></i> Dashboard
+            </a>
+            
+            <a href="#" id="nav-vault" class="nav-item" onclick="showSection('vault'); return false;">
                 <i class="fas fa-video"></i> Video Vault 
                 <span class="ml-auto bg-[var(--accent-color)] text-black text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
             </a>
-            <a href="#" class="nav-item"><i class="fas fa-calendar-check"></i> Session Log</a>
-            <a href="#" class="nav-item">
+            
+            <a href="#" id="nav-sessions" class="nav-item" onclick="showSection('sessions'); return false;">
+                <i class="fas fa-calendar-check"></i> Session Log
+            </a>
+            
+            <a href="#" id="nav-chat" class="nav-item" onclick="showSection('chat'); return false;">
                 <i class="fas fa-comments"></i> Coach Chat 
                 <span class="ml-auto bg-[var(--border-color)] text-[var(--text-main)] text-[10px] px-2 py-0.5 rounded-full font-bold">1</span>
             </a>
             
             <p class="text-xs font-bold uppercase tracking-widest mt-10 mb-3 px-4" style="color: var(--text-muted);">Account</p>
-            <a href="#" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Billing & Invoices</a>
-            <a href="#" class="nav-item"><i class="fas fa-user-edit"></i> Profile Details</a>
-            <a href="contact.html" class="nav-item"><i class="fas fa-headset"></i> Support</a>
+            
+            <a href="#" id="nav-billing" class="nav-item" onclick="showSection('billing'); return false;">
+                <i class="fas fa-file-invoice-dollar"></i> Billing & Invoices
+            </a>
             
             <a href="login.html" class="nav-item mt-10 text-[var(--accent-color)] hover:bg-[var(--dash-bg)]">
                 <i class="fas fa-sign-out-alt text-[var(--accent-color)]"></i> Log Out
@@ -359,152 +376,118 @@
 
         <main class="content-area">
             
-            <div class="hero-banner mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 p-8 md:p-12">
-                <div class="hero-banner-pattern"></div>
-                <div class="relative z-10">
-                    <span class="inline-block border border-white/50 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4">Program Active</span>
-                    <h1 class="text-3xl md:text-4xl font-black mb-2 tracking-tight text-white">Phase 2: Operational Scaling</h1>
-                    <p class="text-gray-300 text-base max-w-xl font-medium">Your coach, <strong class="text-[var(--accent-color)]">Sarah Jenkins</strong>, has uploaded the new "Architecture of Delegation" framework to your vault.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10">
-                    <button class="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black px-6 py-3 font-bold text-sm uppercase tracking-wide transition-all rounded-md">View Framework</button>
-                    <button class="w-full sm:w-auto bg-[var(--accent-color)] hover:bg-[var(--accent-dark)] text-black border-2 border-[var(--accent-color)] hover:border-[var(--accent-dark)] px-6 py-3 font-bold text-sm uppercase tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 rounded-md">
-                        <i class="fas fa-calendar-plus"></i> Next Session: Oct 18
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+            <div id="section-dashboard" class="block">
                 
-                <div class="dash-card p-6 flex flex-col justify-center">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Program Progress</p>
-                        <i class="fas fa-chart-line text-[var(--text-muted)]"></i>
+                <div class="hero-banner mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 p-8 md:p-12">
+                    <div class="hero-banner-pattern"></div>
+                    <div class="relative z-10">
+                        <span class="inline-block border border-white/50 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4">Program Active</span>
+                        <h1 class="text-3xl md:text-4xl font-black mb-2 tracking-tight text-white">Phase 2: Operational Scaling</h1>
+                        <p class="text-gray-300 text-base max-w-xl font-medium">Your coach, <strong class="text-[var(--accent-color)]">Sarah Jenkins</strong>, has uploaded the new "Architecture of Delegation" framework to your vault.</p>
                     </div>
-                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">68%</h3>
-                    <div class="mt-3">
-                        <div class="progress-bg"><div class="progress-fill" style="width: 68%;"></div></div>
-                        <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Month 4 of 6</p>
-                    </div>
-                </div>
-
-                <div class="dash-card p-6 flex flex-col justify-center">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Live Hours Logged</p>
-                        <i class="fas fa-clock text-[var(--text-muted)]"></i>
-                    </div>
-                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18.5 <span class="text-lg text-[var(--text-muted)]">hrs</span></h3>
-                    <div class="mt-3">
-                        <div class="progress-bg"><div class="progress-fill" style="width: 45%; background-color: var(--text-main);"></div></div>
-                        <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">+2.0 hours this week</p>
+                    <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10">
+                        <button class="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black px-6 py-3 font-bold text-sm uppercase tracking-wide transition-all rounded-md" onclick="showSection('vault')">View Framework</button>
+                        <button class="w-full sm:w-auto bg-[var(--accent-color)] hover:bg-[var(--accent-dark)] text-black border-2 border-[var(--accent-color)] hover:border-[var(--accent-dark)] px-6 py-3 font-bold text-sm uppercase tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 rounded-md">
+                            <i class="fas fa-calendar-plus"></i> Next Session: Oct 18
+                        </button>
                     </div>
                 </div>
 
-                <div class="dash-card p-6 flex flex-col justify-between border-l-4 border-l-[var(--accent-color)]">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Pending Action</p>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-color);">Required</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-[var(--text-main)] mt-1">Phase 3 Assessment</h3>
-                    <p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-1">Please complete the team performance evaluation form.</p>
-                    <a href="#" class="text-[var(--accent-color)] font-bold text-sm mt-3 hover:underline flex items-center gap-1">Review & Submit <i class="fas fa-arrow-right text-xs"></i></a>
-                </div>
-
-                <div class="dash-card p-6 flex items-center gap-4">
-                    <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Coach" class="w-16 h-16 rounded-full object-cover border-2 border-[var(--border-color)] object-top">
-                    <div>
-                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Lead Coach</p>
-                        <h3 class="text-lg font-bold text-[var(--text-main)] leading-tight">Sarah Jenkins</h3>
-                        <p class="text-xs text-[#10b981] font-bold mt-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online Now</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <div class="lg:col-span-2 dash-card flex flex-col min-w-0">
-                    <div class="p-6 border-b border-[var(--border-color)] flex justify-between items-center">
-                        <div>
-                            <h3 class="text-lg font-bold text-[var(--text-main)]">Session Log & Deliverables</h3>
-                            <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Track your 1-on-1 history and download materials.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                    <div class="dash-card p-6 flex flex-col justify-center">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Program Progress</p>
+                            <i class="fas fa-chart-line text-[var(--text-muted)]"></i>
                         </div>
-                        <button class="btn-sm btn-outline-table w-auto min-w-0 !px-4"><i class="fas fa-download mr-1"></i> Download All</button>
+                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">68%</h3>
+                        <div class="mt-3">
+                            <div class="progress-bg"><div class="progress-fill" style="width: 68%;"></div></div>
+                            <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Month 4 of 6</p>
+                        </div>
                     </div>
-                    
-                    <div class="overflow-x-auto flex-grow w-full">
-                        <table class="clean-table min-w-[700px]">
-                            <thead>
-                                <tr>
-                                    <th>Session Focus</th>
-                                    <th>Date</th>
-                                    <th>Material</th>
-                                    <th>Status</th>
-                                    <th style="text-align: center; width: 170px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><span class="font-bold text-[var(--text-main)]">1. Vision Alignment</span></td>
-                                    <td>Sep 10</td>
-                                    <td><span class="text-[var(--text-muted)] text-sm"><i class="fas fa-file-pdf text-[var(--text-muted)] opacity-50 mr-1"></i> Audit Checklist</span></td>
-                                    <td><span class="status-badge badge-success">Complete</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-bold text-[var(--text-main)]">2. The Energy Audit</span></td>
-                                    <td>Sep 24</td>
-                                    <td><span class="text-[var(--text-muted)] text-sm"><i class="fas fa-file-excel text-[var(--text-muted)] opacity-50 mr-1"></i> Tracker</span></td>
-                                    <td><span class="status-badge badge-success">Complete</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
-                                </tr>
-                                <tr style="background: rgba(16, 185, 129, 0.05);">
-                                    <td><span class="font-bold text-[var(--text-main)]">3. Team Architecture</span></td>
-                                    <td>Oct 18</td>
-                                    <td><span class="text-[var(--accent-color)] font-bold text-sm"><i class="fas fa-project-diagram mr-1"></i> Miro Board</span></td>
-                                    <td><span class="status-badge badge-warning">Upcoming</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-action">Join Zoom</button></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-bold text-[var(--text-main)]">4. High-Ticket Pitch</span></td>
-                                    <td>Nov 02</td>
-                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
-                                    <td><span class="status-badge badge-info">Locked</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
+
+                    <div class="dash-card p-6 flex flex-col justify-center">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Live Hours Logged</p>
+                            <i class="fas fa-clock text-[var(--text-muted)]"></i>
+                        </div>
+                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18.5 <span class="text-lg text-[var(--text-muted)]">hrs</span></h3>
+                        <div class="mt-3">
+                            <div class="progress-bg"><div class="progress-fill" style="width: 45%; background-color: var(--text-main);"></div></div>
+                            <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">+2.0 hours this week</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-card p-6 flex flex-col justify-between border-l-4 border-l-[var(--accent-color)]">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Pending Action</p>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-color);">Required</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-[var(--text-main)] mt-1">Phase 3 Assessment</h3>
+                        <p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-1">Please complete the team performance evaluation form.</p>
+                        <a href="#" class="text-[var(--accent-color)] font-bold text-sm mt-3 hover:underline flex items-center gap-1">Review & Submit <i class="fas fa-arrow-right text-xs"></i></a>
+                    </div>
+
+                    <div class="dash-card p-6 flex items-center gap-4">
+                        <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Coach" class="w-16 h-16 rounded-full object-cover border-2 border-[var(--border-color)] object-top">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Lead Coach</p>
+                            <h3 class="text-lg font-bold text-[var(--text-main)] leading-tight">Sarah Jenkins</h3>
+                            <p class="text-xs text-[#10b981] font-bold mt-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online Now</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-8">
-                    
-                    <div class="dash-card flex flex-col h-[400px]">
-                        <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px]">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 dash-card flex flex-col min-w-0">
+                        <div class="p-6 border-b border-[var(--border-color)] flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-[var(--text-main)]">Recent Sessions</h3>
+                            </div>
+                            <button class="text-xs font-bold text-[var(--accent-color)] hover:underline" onclick="showSection('sessions')">View Full Log</button>
+                        </div>
+                        <div class="overflow-x-auto flex-grow w-full">
+                            <table class="clean-table min-w-[600px]">
+                                <thead>
+                                    <tr>
+                                        <th>Session Focus</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th style="text-align: center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: rgba(16, 185, 129, 0.05);">
+                                        <td><span class="font-bold text-[var(--text-main)]">3. Team Architecture</span></td>
+                                        <td>Oct 18</td>
+                                        <td><span class="status-badge badge-warning">Upcoming</span></td>
+                                        <td class="text-center"><button class="btn-sm btn-action">Join Zoom</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="font-bold text-[var(--text-main)]">2. The Energy Audit</span></td>
+                                        <td>Sep 24</td>
+                                        <td><span class="status-badge badge-success">Complete</span></td>
+                                        <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="dash-card flex flex-col h-[350px]">
+                        <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px] cursor-pointer" onclick="showSection('chat')">
                             <h3 class="font-bold text-[var(--text-main)] flex items-center gap-2">
                                 <i class="fas fa-comment-alt text-[var(--accent-color)]"></i> Coach Chat
                             </h3>
-                            <i class="fas fa-ellipsis-h text-[var(--text-muted)] cursor-pointer hover:text-[var(--text-main)] transition-colors"></i>
+                            <i class="fas fa-external-link-alt text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors"></i>
                         </div>
-                        
                         <div class="flex-grow p-4 overflow-y-auto space-y-4 bg-[var(--bg-color)]">
-                            <p class="text-center text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold">Yesterday</p>
-                            
-                            <div class="flex flex-col items-start">
-                                <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:22 PM</span>
-                                <div class="chat-bubble chat-editor border border-[var(--border-color)]">
-                                    David, incredible progress on your delegation targets this week. Remember the golden rule: Do only what only you can do.
-                                </div>
-                            </div>
-                            
                             <div class="flex flex-col items-start mt-2">
                                 <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:23 PM</span>
                                 <div class="chat-bubble chat-editor border border-[var(--border-color)]">
                                     Review the Architecture Framework I just unlocked before our call on the 18th. Let's map out your org chart together.
                                 </div>
                             </div>
-
                             <div class="flex flex-col items-end mt-2">
                                 <span class="text-[10px] text-[var(--text-muted)] mb-1 mr-1 font-bold">You • 15:45 PM</span>
                                 <div class="chat-bubble chat-author">
@@ -512,50 +495,314 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="p-3 border-t border-[var(--border-color)] bg-[var(--card-bg)] rounded-b-[15px] flex items-center gap-2">
-                            <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] p-2 transition-colors"><i class="fas fa-paperclip"></i></button>
-                            <input type="text" placeholder="Message Sarah..." class="flex-grow bg-[var(--dash-bg)] border border-[var(--border-color)] rounded-full px-4 py-2 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent-color)] transition-colors">
-                            <button class="bg-[var(--text-main)] text-[var(--bg-color)] w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-white transition-colors"><i class="fas fa-paper-plane text-xs"></i></button>
-                        </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="dash-card p-6">
-                        <h3 class="text-lg font-bold text-[var(--text-main)] mb-4 border-b border-[var(--border-color)] pb-3">Agreements & NDAs</h3>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <i class="fas fa-file-contract text-[var(--text-muted)] text-xl"></i>
-                                    <div>
-                                        <p class="text-sm font-bold text-[var(--text-main)]">Mutual NDA</p>
-                                        <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Signed Sep 01</p>
-                                    </div>
-                                </div>
-                                <i class="fas fa-check-circle text-[#10b981]"></i>
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <i class="fas fa-file-signature text-[var(--accent-color)] text-xl"></i>
-                                    <div>
-                                        <p class="text-sm font-bold text-[var(--text-main)]">Coaching Scope</p>
-                                        <p class="text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-bold">Signature Required</p>
-                                    </div>
-                                </div>
-                                <button class="btn-sm btn-outline-table" style="min-width: auto; padding: 4px 12px; height: auto;">Sign</button>
-                            </div>
-                        </div>
+            <div id="section-vault" class="flex-col gap-6" style="display: none;">
+                <div class="flex justify-between items-end mb-2">
+                    <div>
+                        <h3 class="text-2xl font-black text-[var(--text-main)]">Video Vault</h3>
+                        <p class="text-sm font-medium text-[var(--text-muted)] mt-1">Access your session replays and exclusive frameworks.</p>
                     </div>
-
+                    <div class="flex gap-2 border-b border-[var(--border-color)] pb-1">
+                        <button class="text-sm font-bold text-[var(--accent-color)] border-b-2 border-[var(--accent-color)] pb-2 px-2">All Files</button>
+                        <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Replays</button>
+                        <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Frameworks</button>
+                    </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <div class="dash-card overflow-hidden">
+                        <div class="video-thumb">
+                            <img src="images/pexels-pavel-danilyuk-6203641.jpg" alt="Video">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="duration-badge">45:20</span>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded mb-2 inline-block">New Framework</span>
+                            <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight mb-2">The Architecture of Delegation</h4>
+                            <p class="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">Learn how to build an organizational chart that scales your business without requiring your constant presence.</p>
+                            <button class="btn-outline w-full"><i class="fas fa-play mr-2"></i> Watch Now</button>
+                        </div>
+                    </div>
+
+                    <div class="dash-card overflow-hidden">
+                        <div class="video-thumb">
+                            <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Video">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="duration-badge">60:00</span>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--dash-bg)] px-2 py-1 rounded mb-2 inline-block">Session Replay</span>
+                            <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight mb-2">Session 2: The Energy Audit</h4>
+                            <p class="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">Full recording of our September 24th strategy call identifying operational bottlenecks and energy drains.</p>
+                            <button class="btn-outline w-full"><i class="fas fa-play mr-2"></i> Watch Now</button>
+                        </div>
+                    </div>
+
+                    <div class="dash-card overflow-hidden">
+                        <div class="video-thumb">
+                            <img src="images/pexels-nappy-935977.jpg" alt="Video">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="duration-badge">52:14</span>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--dash-bg)] px-2 py-1 rounded mb-2 inline-block">Session Replay</span>
+                            <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight mb-2">Session 1: Vision Alignment</h4>
+                            <p class="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">Our kickoff session defining your 12-month goals, revenue targets, and expected coaching outcomes.</p>
+                            <button class="btn-outline w-full"><i class="fas fa-play mr-2"></i> Watch Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-sessions" class="flex-col gap-6" style="display: none;">
+                <div class="flex justify-between items-end mb-2">
+                    <div>
+                        <h3 class="text-2xl font-black text-[var(--text-main)]">Master Session Log</h3>
+                        <p class="text-sm font-medium text-[var(--text-muted)] mt-1">A complete history of your 1-on-1 coaching program.</p>
+                    </div>
+                    <button class="btn-action !w-auto !px-6"><i class="fas fa-download"></i> Export Log</button>
+                </div>
+
+                <div class="dash-card overflow-hidden w-full">
+                    <div class="overflow-x-auto w-full">
+                        <table class="clean-table w-full">
+                            <thead>
+                                <tr>
+                                    <th>Session Focus</th>
+                                    <th>Date</th>
+                                    <th>Material / Deliverable</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center; width: 170px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">1. Vision Alignment</span></td>
+                                    <td>Sep 10, 2024</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm"><i class="fas fa-file-pdf mr-1"></i> Audit Checklist</span></td>
+                                    <td><span class="status-badge badge-success">Complete</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">2. The Energy Audit</span></td>
+                                    <td>Sep 24, 2024</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm"><i class="fas fa-file-excel mr-1"></i> Time Tracker</span></td>
+                                    <td><span class="status-badge badge-success">Complete</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
+                                </tr>
+                                <tr style="background: rgba(16, 185, 129, 0.05);">
+                                    <td><span class="font-bold text-[var(--text-main)]">3. Team Architecture</span></td>
+                                    <td>Oct 18, 2024</td>
+                                    <td><span class="text-[var(--accent-color)] font-bold text-sm"><i class="fas fa-project-diagram mr-1"></i> Miro Board</span></td>
+                                    <td><span class="status-badge badge-warning">Upcoming</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-action">Join Zoom</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">4. High-Ticket Pitch</span></td>
+                                    <td>Nov 02, 2024</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
+                                    <td><span class="status-badge badge-info">Locked</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">5. Scaling Systems</span></td>
+                                    <td>Nov 16, 2024</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
+                                    <td><span class="status-badge badge-info">Locked</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">6. Graduation / Review</span></td>
+                                    <td>Dec 01, 2024</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
+                                    <td><span class="status-badge badge-info">Locked</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-chat" class="flex-col h-full" style="display: none; height: calc(100vh - 150px);">
+                <div class="dash-card flex flex-col h-full max-w-5xl mx-auto w-full">
+                    <div class="p-6 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px]">
+                        <div class="flex items-center gap-4">
+                            <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Coach" class="w-12 h-12 rounded-full object-cover border border-[var(--border-color)]">
+                            <div>
+                                <h3 class="font-bold text-[var(--text-main)] text-lg">Sarah Jenkins</h3>
+                                <p class="text-xs text-[#10b981] font-bold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 text-[var(--text-muted)]">
+                            <button class="hover:text-[var(--text-main)] transition-colors"><i class="fas fa-phone-alt"></i></button>
+                            <button class="hover:text-[var(--text-main)] transition-colors"><i class="fas fa-video"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-grow p-6 overflow-y-auto space-y-6 bg-[var(--bg-color)]">
+                        <p class="text-center text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold">Yesterday</p>
+                        
+                        <div class="flex flex-col items-start max-w-[80%]">
+                            <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:22 PM</span>
+                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-base">
+                                David, incredible progress on your delegation targets this week. Remember the golden rule: Do only what only you can do.
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-start max-w-[80%]">
+                            <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:23 PM</span>
+                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-base">
+                                Review the Architecture Framework I just unlocked before our call on the 18th. Let's map out your org chart together. Let me know if you have trouble finding it in the Video Vault.
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-end max-w-[80%] ml-auto">
+                            <span class="text-[10px] text-[var(--text-muted)] mb-1 mr-1 font-bold">You • 15:45 PM</span>
+                            <div class="chat-bubble chat-author text-base">
+                                Got it! I've already drafted a rough version on Miro. Will send it over shortly.
+                            </div>
+                        </div>
+
+                        <p class="text-center text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold mt-8">Today</p>
+
+                        <div class="flex flex-col items-start max-w-[80%]">
+                            <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 09:05 AM</span>
+                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-base">
+                                Sounds perfect. Looking forward to reviewing it!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 border-t border-[var(--border-color)] bg-[var(--card-bg)] rounded-b-[15px] flex items-center gap-4">
+                        <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] p-2 transition-colors text-xl"><i class="fas fa-paperclip"></i></button>
+                        <input type="text" placeholder="Type your message..." class="flex-grow bg-[var(--dash-bg)] border border-[var(--border-color)] rounded-full px-6 py-3 text-base text-[var(--text-main)] outline-none focus:border-[var(--accent-color)] transition-colors">
+                        <button class="bg-[var(--text-main)] text-[var(--bg-color)] w-12 h-12 rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-white transition-colors"><i class="fas fa-paper-plane text-lg"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section-billing" class="flex-col gap-6" style="display: none;">
+                <div class="flex justify-between items-end mb-2">
+                    <div>
+                        <h3 class="text-2xl font-black text-[var(--text-main)]">Billing & Invoices</h3>
+                        <p class="text-sm font-medium text-[var(--text-muted)] mt-1">Manage your payment methods and download past receipts.</p>
+                    </div>
+                    <button class="btn-outline !w-auto !px-6"><i class="fas fa-credit-card mr-2"></i> Update Card</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
+                    <div class="dash-card p-6 border-l-4 border-l-[var(--accent-color)]">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Current Balance Due</p>
+                        <h3 class="text-3xl font-black text-[var(--text-main)]">$0.00</h3>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-bold"><i class="fas fa-check-circle text-[var(--accent-color)]"></i> Account in good standing</p>
+                    </div>
+                    <div class="dash-card p-6">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Next Payment</p>
+                        <h3 class="text-3xl font-black text-[var(--text-main)]">$2,500</h3>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">Processing on Nov 1, 2024</p>
+                    </div>
+                    <div class="dash-card p-6 flex flex-col justify-center">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-2">Active Payment Method</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-8 rounded bg-[var(--dash-bg)] border border-[var(--border-color)] flex items-center justify-center text-xl">
+                                <i class="fab fa-cc-visa"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-[var(--text-main)]">Visa ending in 4242</p>
+                                <p class="text-[10px] font-medium text-[var(--text-muted)]">Expires 12/26</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-card overflow-hidden">
+                    <div class="p-6 border-b border-[var(--border-color)]">
+                        <h4 class="font-bold text-[var(--text-main)] text-lg">Payment History</h4>
+                    </div>
+                    <div class="overflow-x-auto w-full">
+                        <table class="clean-table w-full">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center;">Receipt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-bold text-[var(--text-main)]">INV-2024-1042</td>
+                                    <td>Monthly Retainer (Oct)</td>
+                                    <td>Oct 01, 2024</td>
+                                    <td class="font-bold text-[var(--text-main)]">$2,500.00</td>
+                                    <td><span class="status-badge badge-success">Paid</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-12 !px-0"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-[var(--text-main)]">INV-2024-0988</td>
+                                    <td>Monthly Retainer (Sep)</td>
+                                    <td>Sep 01, 2024</td>
+                                    <td class="font-bold text-[var(--text-main)]">$2,500.00</td>
+                                    <td><span class="status-badge badge-success">Paid</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-12 !px-0"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-[var(--text-main)]">INV-2024-0890</td>
+                                    <td>Program Kickoff / Setup</td>
+                                    <td>Aug 15, 2024</td>
+                                    <td class="font-bold text-[var(--text-main)]">$5,000.00</td>
+                                    <td><span class="status-badge badge-success">Paid</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-12 !px-0"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
         </main>
     </div>
 
     <script>
+        // Section Navigation Logic (The Filter Thingy)
+        function showSection(sectionName) {
+            // List of all functional section IDs
+            const sections = ['dashboard', 'vault', 'sessions', 'chat', 'billing'];
+            
+            // 1. Update Active State on Sidebar Buttons
+            document.querySelectorAll('.nav-item').forEach(el => {
+                if(el.id && el.id.startsWith('nav-')) {
+                    el.classList.remove('active');
+                }
+            });
+            const activeNav = document.getElementById('nav-' + sectionName);
+            if(activeNav) activeNav.classList.add('active');
+
+            // 2. Hide all sections, then show the requested one
+            sections.forEach(sec => {
+                const el = document.getElementById('section-' + sec);
+                if (el) {
+                    if (sec === sectionName) {
+                        // Dashboard needs to be block for the grid, others flex-col
+                        el.style.display = (sec === 'dashboard') ? 'block' : 'flex';
+                    } else {
+                        el.style.display = 'none';
+                    }
+                }
+            });
+
+            // 3. Auto-close sidebar on mobile after clicking a link
+            if (window.innerWidth <= 1024 && sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
+        }
+
         // Sidebar Toggle Logic
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');

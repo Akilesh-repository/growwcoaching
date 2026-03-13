@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | GrowwCoaching</title>
+    <title>Admin Dashboard | DoneCoaching</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -172,6 +172,7 @@
             border-radius: 8px; 
             margin-bottom: 4px;
             transition: all 0.2s;
+            cursor: pointer;
         }
         
         .nav-item i { width: 24px; font-size: 1.1rem; text-align: center; margin-right: 14px; transition: transform 0.2s; }
@@ -322,26 +323,31 @@
     <aside class="sidebar" id="sidebar">
         <div class="mb-12 px-4">
             <a href="index.html" class="text-2xl font-black tracking-tighter block" style="color: var(--text-main); text-decoration: none;">
-                GrowwCoaching
+                DoneCoaching
             </a>
         </div>
         
         <nav class="flex-grow">
             <p class="text-xs font-bold uppercase tracking-widest mb-3 px-4" style="color: var(--text-muted);">Command Center</p>
-            <a href="admin.html" class="nav-item active"><i class="fas fa-satellite-dish"></i> Overview</a>
-            <a href="#" class="nav-item">
+            
+            <a href="#" id="nav-overview" class="nav-item active" onclick="showSection('overview'); return false;">
+                <i class="fas fa-satellite-dish"></i> Overview
+            </a>
+            <a href="#" id="nav-roster" class="nav-item" onclick="showSection('roster'); return false;">
                 <i class="fas fa-users"></i> Client Roster
             </a>
-            <a href="#" class="nav-item"><i class="fas fa-funnel-dollar"></i> Sales Pipeline <span class="ml-auto bg-[var(--accent-color)] text-black text-[10px] px-2 py-0.5 rounded-full font-bold">2 New</span></a>
+            <a href="#" id="nav-pipeline" class="nav-item" onclick="showSection('pipeline'); return false;">
+                <i class="fas fa-funnel-dollar"></i> Sales Pipeline <span class="ml-auto bg-[var(--accent-color)] text-black text-[10px] px-2 py-0.5 rounded-full font-bold">2 New</span>
+            </a>
+
+            <p class="text-xs font-bold uppercase tracking-widest mt-8 mb-3 px-4" style="color: var(--text-muted);">Management</p>
             
-            <p class="text-xs font-bold uppercase tracking-widest mt-10 mb-3 px-4" style="color: var(--text-muted);">Content & Admin</p>
-            <a href="#" class="nav-item">
-                <i class="fas fa-calendar-alt"></i> Master Schedule 
+            <a href="#" id="nav-schedule" class="nav-item" onclick="showSection('schedule'); return false;">
+                <i class="fas fa-calendar-alt"></i> Master Schedule
             </a>
-            <a href="#" class="nav-item">
-                <i class="fas fa-cloud-upload-alt"></i> Asset Manager
+            <a href="#" id="nav-finance" class="nav-item" onclick="showSection('finance'); return false;">
+                <i class="fas fa-file-invoice-dollar"></i> Finance & Billing
             </a>
-            <a href="#" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Finance & Billing</a>
             
             <a href="login.html" class="nav-item mt-10 text-[var(--accent-color)] hover:bg-[var(--dash-bg)]">
                 <i class="fas fa-sign-out-alt text-[var(--accent-color)]"></i> Log Out
@@ -387,66 +393,68 @@
 
         <main class="content-area">
             
-            <div class="hero-banner mb-6">
-                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                    <div>
-                        <h1 class="text-2xl md:text-3xl font-black mb-2 tracking-tight text-white">Business Overview</h1>
-                        <p class="text-gray-400 text-sm font-medium">You have <strong class="text-white">3 coaching sessions</strong> scheduled today. The business is running smoothly.</p>
+            <div id="overview-top">
+                <div class="hero-banner mb-6">
+                    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                        <div>
+                            <h1 class="text-2xl md:text-3xl font-black mb-2 tracking-tight text-white">Business Overview</h1>
+                            <p class="text-gray-400 text-sm font-medium">You have <strong class="text-white">3 coaching sessions</strong> scheduled today. The business is running smoothly.</p>
+                        </div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/20 px-4 py-2 rounded-lg">
+                            <i class="fas fa-circle text-[8px] mr-1 blink"></i> System Nominal
+                        </p>
                     </div>
-                    <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/20 px-4 py-2 rounded-lg">
-                        <i class="fas fa-circle text-[8px] mr-1 blink"></i> System Nominal
-                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <button class="btn-action"><i class="fas fa-user-plus"></i> Onboard</button>
+                    <button class="btn-outline"><i class="fas fa-file-invoice-dollar"></i>Invoice</button>
+                    <button class="btn-outline"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
+                    <button class="btn-outline"><i class="fas fa-calendar-check"></i> Book Keynote</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+                    <div class="dash-card p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Monthly Recurring (MRR)</p>
+                            <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--accent-color)]"><i class="fas fa-chart-bar"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">$124.5k</h3>
+                        <p class="text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +12% from last month</p>
+                    </div>
+
+                    <div class="dash-card p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Active Retainers</p>
+                            <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-user-tie"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18</h3>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">2 graduating this month</p>
+                    </div>
+
+                    <div class="dash-card p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Upcoming Keynotes</p>
+                            <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-microphone-alt"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">3</h3>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Next: Nov 14 (Tech Summit)</p>
+                    </div>
+
+                    <div class="dash-card p-6 border-l-4 border-l-[#f59e0b]">
+                        <div class="flex justify-between items-start mb-2">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Pending Proposals</p>
+                            <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[#f59e0b]"><i class="fas fa-file-contract"></i></div>
+                        </div>
+                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">$45k</h3>
+                        <p class="text-xs text-[#f59e0b] mt-2 font-bold">4 deals awaiting signature</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <button class="btn-action"><i class="fas fa-user-plus"></i> Onboard</button>
-                <button class="btn-outline"><i class="fas fa-file-invoice-dollar"></i>Invoice</button>
-                <button class="btn-outline"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
-                <button class="btn-outline"><i class="fas fa-calendar-check"></i> Book Keynote</button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
-                <div class="dash-card p-6">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Monthly Recurring (MRR)</p>
-                        <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--accent-color)]"><i class="fas fa-chart-bar"></i></div>
-                    </div>
-                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">$124.5k</h3>
-                    <p class="text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +12% from last month</p>
-                </div>
-
-                <div class="dash-card p-6">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Active Retainers</p>
-                        <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-user-tie"></i></div>
-                    </div>
-                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18</h3>
-                    <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">2 graduating this month</p>
-                </div>
-
-                <div class="dash-card p-6">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Upcoming Keynotes</p>
-                        <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-microphone-alt"></i></div>
-                    </div>
-                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">3</h3>
-                    <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Next: Nov 14 (Tech Summit)</p>
-                </div>
-
-                <div class="dash-card p-6 border-l-4 border-l-[#f59e0b]">
-                    <div class="flex justify-between items-start mb-2">
-                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Pending Proposals</p>
-                        <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[#f59e0b]"><i class="fas fa-file-contract"></i></div>
-                    </div>
-                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">$45k</h3>
-                    <p class="text-xs text-[#f59e0b] mt-2 font-bold">4 deals awaiting signature</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div id="bottom-grid" class="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 
-                <div class="xl:col-span-2 flex flex-col gap-6">
+                <div id="section-roster" class="xl:col-span-2 flex flex-col gap-6">
                     <div class="flex justify-between items-end">
                         <div>
                             <h3 class="text-xl font-black text-[var(--text-main)]">Active Client Roster</h3>
@@ -536,7 +544,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-6">
+                <div id="section-pipeline" class="flex flex-col gap-6">
                     <div class="flex justify-between items-end">
                         <div>
                             <h3 class="text-xl font-black text-[var(--text-main)]">Sales Pipeline</h3>
@@ -582,10 +590,233 @@
 
             </div>
 
+            <div id="section-schedule" class="flex-col gap-6" style="display: none;">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h3 class="text-xl font-black text-[var(--text-main)]">Master Schedule</h3>
+                        <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Manage your upcoming coaching sessions and events.</p>
+                    </div>
+                    <button class="btn-action !w-auto !px-6"><i class="fas fa-plus"></i> New Event</button>
+                </div>
+                
+                <div class="flex gap-2 border-b border-[var(--border-color)] pb-3">
+                    <button class="text-sm font-bold text-[var(--accent-color)] border-b-2 border-[var(--accent-color)] pb-2 px-2">Upcoming</button>
+                    <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Past</button>
+                    <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Canceled</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    
+                    <div class="dash-card p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-[#f59e0b] bg-[#f59e0b]/10 px-2 py-1 rounded">In 2 hours</span>
+                                <div class="w-8 h-8 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-video"></i></div>
+                            </div>
+                            <h4 class="font-bold text-[var(--text-main)] text-lg mb-1">1-on-1 Strategy Session</h4>
+                            <p class="text-xs text-[var(--text-muted)] font-medium mb-4"><i class="far fa-clock mr-1"></i> Today, 2:00 PM - 3:00 PM</p>
+                            <div class="flex items-center gap-3 mb-6">
+                                <img src="images/pexels-nappy-935977.jpg" class="w-8 h-8 rounded-full object-cover border border-[var(--border-color)]">
+                                <div>
+                                    <p class="text-sm font-bold text-[var(--text-main)]">David O.</p>
+                                    <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">Founder & CEO</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn-sm btn-action !h-10">Join Zoom</button>
+                            <button class="btn-sm btn-outline-table !px-0 !w-10 !h-10 flex-shrink-0"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="dash-card p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded">Tomorrow</span>
+                                <div class="w-8 h-8 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-phone-alt"></i></div>
+                            </div>
+                            <h4 class="font-bold text-[var(--text-main)] text-lg mb-1">Discovery Call</h4>
+                            <p class="text-xs text-[var(--text-muted)] font-medium mb-4"><i class="far fa-clock mr-1"></i> Tomorrow, 10:00 AM - 10:45 AM</p>
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-8 h-8 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-xs font-black text-[var(--text-main)] border border-[var(--border-color)]">AK</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[var(--text-main)]">Alicia K.</p>
+                                    <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">New Prospect</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn-sm btn-outline-table !h-10" style="background: var(--dash-bg);">Review Notes</button>
+                            <button class="btn-sm btn-outline-table !px-0 !w-10 !h-10 flex-shrink-0"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="dash-card p-5 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--dash-bg)] px-2 py-1 rounded">Nov 14</span>
+                                <div class="w-8 h-8 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-microphone-alt"></i></div>
+                            </div>
+                            <h4 class="font-bold text-[var(--text-main)] text-lg mb-1">TechCorp Sales Summit</h4>
+                            <p class="text-xs text-[var(--text-muted)] font-medium mb-4"><i class="far fa-clock mr-1"></i> Nov 14, 9:00 AM - 5:00 PM</p>
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-8 h-8 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-[10px] font-black text-[var(--text-main)] border border-[var(--border-color)]"><i class="fas fa-building text-base"></i></div>
+                                <div>
+                                    <p class="text-sm font-bold text-[var(--text-main)]">TechCorp Inc.</p>
+                                    <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">Corporate Offsite</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn-sm btn-outline-table !h-10" style="background: var(--dash-bg);">View Details</button>
+                            <button class="btn-sm btn-outline-table !px-0 !w-10 !h-10 flex-shrink-0"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="section-finance" class="flex-col gap-6" style="display: none;">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h3 class="text-xl font-black text-[var(--text-main)]">Finance & Billing</h3>
+                        <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Track revenue, client invoices, and expenses.</p>
+                    </div>
+                    <button class="btn-action !w-auto !px-6"><i class="fas fa-file-invoice"></i> Create Invoice</button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="dash-card p-6">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">YTD Revenue</p>
+                        <h3 class="text-2xl font-black text-[var(--text-main)]">$450,200</h3>
+                        <p class="text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +24% vs Last Year</p>
+                    </div>
+                    <div class="dash-card p-6 border-l-4 border-l-[#f59e0b]">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Outstanding</p>
+                        <h3 class="text-2xl font-black text-[var(--text-main)]">$45,000</h3>
+                        <p class="text-xs text-[#f59e0b] mt-2 font-bold">2 Invoices Pending</p>
+                    </div>
+                    <div class="dash-card p-6">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Est. Next Payout</p>
+                        <h3 class="text-2xl font-black text-[var(--text-main)]">$12,500</h3>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">Processing on Nov 15</p>
+                    </div>
+                </div>
+
+                <div class="dash-card overflow-hidden">
+                    <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center">
+                        <h4 class="font-bold text-[var(--text-main)]">Recent Invoices</h4>
+                        <button class="text-xs font-bold text-[var(--accent-color)] hover:underline">View All</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-[var(--dash-bg)] text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
+                                    <th class="p-4 font-black">Invoice</th>
+                                    <th class="p-4 font-black">Client</th>
+                                    <th class="p-4 font-black">Amount</th>
+                                    <th class="p-4 font-black">Date Issued</th>
+                                    <th class="p-4 font-black">Status</th>
+                                    <th class="p-4 font-black text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm font-medium">
+                                <tr class="border-b border-[var(--border-color)] hover:bg-[var(--card-hover)] transition-colors">
+                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-089</td>
+                                    <td class="p-4">TechCorp</td>
+                                    <td class="p-4 font-bold text-[var(--text-main)]">$12,000</td>
+                                    <td class="p-4 text-[var(--text-muted)]">Nov 01, 2024</td>
+                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[#f59e0b]/10 text-[#f59e0b]">Pending</span></td>
+                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                                <tr class="border-b border-[var(--border-color)] hover:bg-[var(--card-hover)] transition-colors">
+                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-088</td>
+                                    <td class="p-4">Marcus T.</td>
+                                    <td class="p-4 font-bold text-[var(--text-main)]">$5,000</td>
+                                    <td class="p-4 text-[var(--text-muted)]">Oct 28, 2024</td>
+                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
+                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                                <tr class="border-b border-[var(--border-color)] hover:bg-[var(--card-hover)] transition-colors">
+                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-087</td>
+                                    <td class="p-4">David O.</td>
+                                    <td class="p-4 font-bold text-[var(--text-main)]">$15,000</td>
+                                    <td class="p-4 text-[var(--text-muted)]">Oct 15, 2024</td>
+                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
+                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                                <tr class="hover:bg-[var(--card-hover)] transition-colors">
+                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-086</td>
+                                    <td class="p-4">Elena R.</td>
+                                    <td class="p-4 font-bold text-[var(--text-main)]">$8,500</td>
+                                    <td class="p-4 text-[var(--text-muted)]">Oct 01, 2024</td>
+                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
+                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 
     <script>
+        // Section Navigation Logic
+        function showSection(sectionName) {
+            const overviewTop = document.getElementById('overview-top');
+            const bottomGrid = document.getElementById('bottom-grid');
+            const sectionRoster = document.getElementById('section-roster');
+            const sectionPipeline = document.getElementById('section-pipeline');
+            const sectionSchedule = document.getElementById('section-schedule');
+            const sectionFinance = document.getElementById('section-finance');
+            
+            // Update Sidebar Active States
+            document.querySelectorAll('.nav-item').forEach(el => {
+                if(el.id && el.id.startsWith('nav-')) el.classList.remove('active');
+            });
+            document.getElementById('nav-' + sectionName).classList.add('active');
+
+            // Hide the standalone sections by default
+            sectionSchedule.style.display = 'none';
+            sectionFinance.style.display = 'none';
+
+            // Toggle Content Visibility & Layout
+            if (sectionName === 'overview') {
+                overviewTop.style.display = 'block';
+                bottomGrid.style.display = 'grid'; 
+                bottomGrid.className = 'grid grid-cols-1 xl:grid-cols-3 gap-8'; 
+                sectionRoster.style.display = 'flex';
+                sectionPipeline.style.display = 'flex';
+            } else if (sectionName === 'roster') {
+                overviewTop.style.display = 'none';
+                bottomGrid.style.display = 'block'; 
+                bottomGrid.className = 'block'; 
+                sectionRoster.style.display = 'flex';
+                sectionPipeline.style.display = 'none';
+            } else if (sectionName === 'pipeline') {
+                overviewTop.style.display = 'none';
+                bottomGrid.style.display = 'block'; 
+                bottomGrid.className = 'block'; 
+                sectionRoster.style.display = 'none';
+                sectionPipeline.style.display = 'flex';
+            } else if (sectionName === 'schedule') {
+                overviewTop.style.display = 'none';
+                bottomGrid.style.display = 'none'; 
+                sectionSchedule.style.display = 'flex';
+            } else if (sectionName === 'finance') {
+                overviewTop.style.display = 'none';
+                bottomGrid.style.display = 'none'; 
+                sectionFinance.style.display = 'flex';
+            }
+
+            // Auto-close sidebar on mobile after clicking a link
+            if (window.innerWidth <= 1024 && sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
+        }
+
         // Sidebar Toggle Logic
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
