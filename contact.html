@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - GrowwCoaching</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === RESET & CORE === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* === THEME VARIABLES (Forest: Black, White, Emerald, Lime) === */
+        :root {
+            --bg-color: #FFFFFF;
+            --bg-secondary: #f4f5f4; 
+            --bg-card: #FFFFFF; 
+            --text-main: #000000;
+            --text-muted: #555555;
+            --accent-color: #10B981; 
+            --accent-dark: #059669; 
+            --border-color: #e5e7eb;
+            --nav-bg: rgba(255, 255, 255, 0.90);
+            --drawer-bg: #FFFFFF;
+            --drawer-text: #000000;
+            --menu-hover-bg: rgba(16, 185, 129, 0.1); 
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-color: #000000; 
+            --bg-secondary: #0a0a0a; 
+            --bg-card: #0a0a0a; 
+            --text-main: #FFFFFF; 
+            --text-muted: #a3a3a3;
+            --accent-color: #A3E635; 
+            --accent-dark: #10B981; 
+            --border-color: #262626;
+            --nav-bg: rgba(0, 0, 0, 0.90);
+            --drawer-bg: #000000;
+            --drawer-text: #FFFFFF;
+            --menu-hover-bg: rgba(163, 230, 53, 0.15); 
+        }
+
+        /* RTL SUPPORT */
+        [dir="rtl"] { text-align: right; }
+        [dir="rtl"] .ml-auto { margin-right: auto; margin-left: 0; }
+        [dir="rtl"] .mr-auto { margin-left: auto; margin-right: 0; }
+        [dir="rtl"] .pl-4 { padding-right: 1rem; padding-left: 0; }
+        [dir="rtl"] .fa-arrow-right { transform: rotate(180deg); }
+
+        /* === NAVBAR === */
+        .navbar { 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); 
+            padding: 12px 0; transition: all 0.3s ease;
+        }
+        
+        /* Main Nav Links */
+        .nav-link { 
+            padding: 6px 10px; 
+            color: var(--text-main); 
+            text-decoration: none; 
+            font-size: 12px; 
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: inline-flex; align-items: center; gap: 4px; cursor: pointer; 
+            border-radius: 9999px; 
+        }
+        @media (min-width: 1440px) {
+            .nav-link { padding: 8px 14px; font-size: 13px; gap: 6px; }
+        }
+        
+        .nav-link:hover, .nav-link.active { 
+            color: var(--accent-color); 
+            background-color: var(--menu-hover-bg);
+        }
+        
+        /* Fixed Dropdown Layout */
+        .dropdown { position: relative; display: flex; align-items: center; height: 100%; }
+        .dropdown-menu { 
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px); 
+            margin-top: 5px; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 100; 
+        }
+        .dropdown-inner { 
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; 
+            min-width: 170px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 8px; 
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        
+        /* Clean Dropdown Items */
+        .dropdown-item { 
+            display: block; padding: 8px 12px; 
+            color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600; 
+            border-radius: 6px; transition: all 0.2s; text-align: left; white-space: nowrap;
+        }
+        .dropdown-item:hover { 
+            background: var(--menu-hover-bg); color: var(--accent-color); 
+        }
+
+        /* PILL TOGGLE */
+        .theme-toggle-pill { width: 52px; height: 26px; background: var(--bg-secondary); border-radius: 30px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; border: 1px solid var(--border-color); }
+        .theme-toggle-pill i { font-size: 10px; z-index: 1; }
+        .theme-toggle-pill .fa-sun { color: #f59e0b; }
+        .theme-toggle-pill .fa-moon { color: #999; }
+        .theme-toggle-pill .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 2; }
+        body.dark-mode .theme-toggle-pill .thumb { transform: translateX(26px); background: #333; }
+
+        /* BUTTONS */
+        .btn { padding: 10px 24px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 9999px; }
+        .btn-solid { background: var(--accent-color); color: var(--bg-color); border: 2px solid var(--accent-color); }
+        .btn-solid:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: var(--bg-color); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+        .btn-outline { border: 2px solid var(--text-main); color: var(--text-main); background: transparent; }
+        .btn-outline:hover { background: var(--text-main); color: var(--bg-color); transform: translateY(-2px); }
+
+        /* FULLSCREEN OVERLAY MENU */
+        .fullscreen-menu { 
+            position: fixed; inset: 0; background: var(--drawer-bg); z-index: 1001; 
+            display: flex; flex-direction: column; color: var(--drawer-text); 
+            opacity: 0; visibility: hidden; transform: scale(0.98); 
+            transition: all 0.3s ease; overflow-y: auto; 
+        }
+        .fullscreen-menu.active { opacity: 1; visibility: visible; transform: scale(1); }
+        
+        .mobile-link { 
+            font-size: 1.125rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; 
+            color: var(--text-main); text-decoration: none; transition: all 0.3s; 
+        }
+        .mobile-link:hover { color: var(--accent-color); }
+
+        /* FOOTER */
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding-top: 80px; }
+        footer h4 { color: var(--text-main); font-weight: 800; font-size: 1.1rem; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;} 
+        footer a, footer li, footer span { color: var(--text-muted); text-decoration: none; transition: all 0.3s; font-size: 0.95rem; }
+        footer a:hover { color: var(--accent-color); }
+        .social-link-circle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: all 0.3s; color: var(--text-main); background: var(--bg-card); }
+        .social-link-circle:hover { background: var(--accent-color); color: var(--bg-color); border-color: var(--accent-color); transform: translateY(-3px); }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding: 24px 0; margin-top: 60px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 w-full flex items-center justify-between gap-2 lg:gap-4">
+            
+            <div class="flex items-center shrink-0">
+                <a href="index.html" class="text-xl lg:text-2xl font-black tracking-tighter" style="color: var(--text-main); text-decoration: none;">
+                    GrowwCoaching
+                </a>
+            </div>
+            
+            <div class="hidden xl:flex flex-1 justify-center items-center gap-0.5">
+                <div class="dropdown">
+                    <div class="nav-link">Home <i class="fas fa-chevron-down text-[8px]"></i></div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <a href="index.html" class="dropdown-item">Home Page 1</a>
+                            <a href="home-2.html" class="dropdown-item">Home Page 2</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="contact.html" class="nav-link active">Contact</a>
+                <div class="dropdown">
+                    <div class="nav-link">Dashboard <i class="fas fa-chevron-down text-[8px]"></i></div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <a href="user.html" class="dropdown-item">User Dashboard</a>
+                            <a href="admin.html" class="dropdown-item">Admin Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden xl:flex items-center justify-end shrink-0 gap-3">
+                <a href="login.html" class="text-[11px] font-bold uppercase tracking-wide text-[var(--text-muted)] hover:text-[var(--accent-color)] transition-colors px-1">Login</a>
+                <a href="register.html" class="btn btn-solid !py-2 !px-4 !text-[11px]">Register</a>
+                
+                <div class="w-px h-4 bg-[var(--border-color)] mx-1"></div>
+                
+                <button id="rtl-btn" class="text-[9px] font-black text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-secondary)] transition-all uppercase tracking-widest border border-[var(--border-color)] px-2 py-1.5 rounded-full">RTL</button>
+                
+                <div id="theme-toggle-desktop" class="theme-toggle-pill" title="Toggle Dark Mode">
+                    <i class="fas fa-sun"></i><i class="fas fa-moon"></i><div class="thumb"></div>
+                </div>
+            </div>
+
+            <div class="xl:hidden flex items-center justify-end w-auto">
+                <button id="mobile-btn" class="w-9 h-9 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] transition-all">
+                    <i class="fas fa-bars text-sm"></i>
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="fullscreen-menu" id="fullscreen-menu">
+        <div class="w-full px-6 py-4 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+            <span class="text-xl font-black tracking-tighter">GrowwCoaching</span>
+            <button id="close-menu" class="w-9 h-9 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-[var(--bg-color)] transition-all">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-start space-y-4 py-8 w-full max-w-md mx-auto text-center px-6 my-auto shrink-0">
+            <a href="index.html" class="mobile-link">Home Page 1</a>
+            <a href="home-2.html" class="mobile-link">Home Page 2</a>
+            <a href="about.html" class="mobile-link">About</a>
+            <a href="services.html" class="mobile-link">Services</a>
+            <a href="pricing.html" class="mobile-link">Pricing</a>
+            <a href="blog.html" class="mobile-link">Blog</a>
+            <a href="faq.html" class="mobile-link">FAQ</a>
+            <a href="contact.html" class="mobile-link" style="color: var(--accent-color);">Contact</a>
+            
+            <div class="w-12 h-px bg-[var(--border-color)] my-1"></div>
+            
+            <a href="user.html" class="mobile-link !text-sm text-[var(--text-muted)]">User Dashboard</a>
+            <a href="admin.html" class="mobile-link !text-sm text-[var(--text-muted)]">Admin Dashboard</a>
+        </div>
+
+        <div class="w-full px-6 py-5 border-t border-[var(--border-color)] flex flex-col gap-4 shrink-0">
+            <div class="flex justify-between items-center max-w-md mx-auto w-full">
+                <div class="flex items-center gap-3">
+                    <span class="text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">Theme:</span>
+                    <div id="theme-toggle-mobile" class="theme-toggle-pill"><i class="fas fa-sun"></i><i class="fas fa-moon"></i><div class="thumb"></div></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">Layout:</span>
+                    <button id="rtl-toggle-mobile" class="text-[10px] font-black text-[var(--text-main)] bg-[var(--bg-secondary)] border border-[var(--border-color)] px-3 py-1.5 rounded-full hover:border-[var(--accent-color)]">LTR / RTL</button>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto">
+                <a href="login.html" class="btn btn-outline w-full !rounded-xl !py-3">Client Login</a>
+                <a href="register.html" class="btn btn-solid w-full !rounded-xl !py-3">Register Now</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="relative w-full overflow-hidden flex flex-col justify-center min-h-[100vh] lg:min-h-[85vh] pt-[100px] lg:pt-[120px] pb-12">
+        
+        <div class="absolute inset-0 z-0">
+            <img src="images/pexels-shkrabaanthony-5878699.jpg" alt="Meeting and Communication" class="w-full h-full object-cover object-center" />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-[var(--bg-color)]"></div>
+        </div>
+        
+        <div class="relative z-10 w-full max-w-5xl mx-auto px-6 text-center">
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-black/40 backdrop-blur-md border border-white/20 mb-4 sm:mb-8 rounded-full">
+                <span class="flex h-2 w-2 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white">Get In Touch</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.15] sm:leading-[1.05] mb-4 sm:mb-8 text-white tracking-tighter">
+                Start the <br>
+                <span class="text-[var(--accent-color)] relative inline-block mt-1 sm:mt-2">
+                    Conversation.
+                </span>
+            </h1>
+            
+            <p class="text-gray-300 text-sm sm:text-lg lg:text-xl leading-relaxed mb-6 sm:mb-12 max-w-3xl mx-auto font-medium">
+                Whether you're inquiring about executive coaching, booking a keynote, or exploring enterprise workshops, our team is ready to engineer your next breakthrough.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center mb-8 sm:mb-16 w-full max-w-md sm:max-w-none mx-auto">
+                <a href="#contact-form" class="btn btn-solid shadow-2xl shadow-emerald-900/30 text-xs sm:text-sm px-5 py-3 sm:px-8 sm:py-4 w-full sm:w-auto">Send a Message</a>
+                <a href="mailto:info@groww.com" class="btn border-2 border-white/30 text-white hover:bg-white hover:text-black backdrop-blur-sm text-xs sm:text-sm px-5 py-3 sm:px-8 sm:py-4 w-full sm:w-auto"><i class="fas fa-envelope mr-2"></i> Email Us Directly</a>
+            </div>
+
+            <div class="flex flex-row flex-wrap justify-center items-center gap-6 sm:gap-12 md:gap-16 text-white pt-6 sm:pt-8 border-t border-white/10 max-w-3xl mx-auto">
+                
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center text-[var(--accent-color)] backdrop-blur-sm border border-white/10">
+                        <i class="fas fa-globe-americas text-xs sm:text-lg"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-base sm:text-xl font-black leading-tight">Global</p>
+                        <p class="text-[9px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold">Client Base</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center text-[var(--accent-color)] backdrop-blur-sm border border-white/10">
+                        <i class="fas fa-bolt text-xs sm:text-lg"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-base sm:text-xl font-black leading-tight">24 Hrs</p>
+                        <p class="text-[9px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold">Avg Response</p>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </section>
+
+    <main id="contact-form" class="py-24 bg-[var(--bg-color)] border-b border-[var(--border-color)] scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                
+                <div class="flex flex-col justify-center">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] mb-6 rounded-full w-max shadow-sm">
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-[var(--accent-color)]">Reach Out</span>
+                    </div>
+                    
+                    <h2 class="text-3xl md:text-5xl font-black leading-tight mb-6 text-[var(--text-main)] tracking-tighter">
+                        Let's build your <span class="text-[var(--accent-color)]">legacy.</span>
+                    </h2>
+                    
+                    <p class="text-[var(--text-muted)] text-base md:text-lg leading-relaxed mb-10">
+                        Fill out the form with your inquiry details. For speaking engagements and corporate workshops, please include potential dates and audience size.
+                    </p>
+                    
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-[var(--menu-hover-bg)] text-[var(--accent-color)] flex items-center justify-center text-xl shrink-0">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-[var(--text-main)] mb-1">Email Us</h4>
+                                <p class="text-sm text-[var(--text-muted)] mb-1">Our team typically responds within 24 hours.</p>
+                                <a href="mailto:info@groww.com" class="text-sm font-bold text-[var(--accent-color)] hover:underline">info@groww.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-[var(--menu-hover-bg)] text-[var(--accent-color)] flex items-center justify-center text-xl shrink-0">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-[var(--text-main)] mb-1">Call Us</h4>
+                                <p class="text-sm text-[var(--text-muted)] mb-1">Available Mon-Fri, 9AM - 6PM EST.</p>
+                                <a href="tel:+15551234567" class="text-sm font-bold text-[var(--accent-color)] hover:underline">+1 (555) 123-4567</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-8 md:p-12 rounded-[2rem] shadow-xl">
+                    <form class="flex flex-col gap-6">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="flex flex-col gap-2">
+                                <label for="firstName" class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">First Name</label>
+                                <input type="text" id="firstName" placeholder="John" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-main)] placeholder-[var(--text-muted)] px-5 py-4 rounded-xl focus:outline-none focus:border-[var(--accent-color)] transition-colors">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label for="lastName" class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">Last Name</label>
+                                <input type="text" id="lastName" placeholder="Doe" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-main)] placeholder-[var(--text-muted)] px-5 py-4 rounded-xl focus:outline-none focus:border-[var(--accent-color)] transition-colors">
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col gap-2">
+                            <label for="email" class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">Email Address</label>
+                            <input type="email" id="email" placeholder="john@company.com" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-main)] placeholder-[var(--text-muted)] px-5 py-4 rounded-xl focus:outline-none focus:border-[var(--accent-color)] transition-colors">
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label for="inquiryType" class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">Inquiry Type</label>
+                            <select id="inquiryType" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-main)] px-5 py-4 rounded-xl focus:outline-none focus:border-[var(--accent-color)] transition-colors appearance-none cursor-pointer">
+                                <option value="coaching">1-on-1 Executive Coaching</option>
+                                <option value="speaking">Keynote Speaking Booking</option>
+                                <option value="workshop">Corporate Team Workshop</option>
+                                <option value="other">General Inquiry / Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex flex-col gap-2">
+                            <label for="message" class="text-xs font-bold text-[var(--text-main)] uppercase tracking-wider">Your Message</label>
+                            <textarea id="message" rows="5" placeholder="Tell us about your goals or event details..." class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] text-[var(--text-main)] placeholder-[var(--text-muted)] px-5 py-4 rounded-xl focus:outline-none focus:border-[var(--accent-color)] transition-colors resize-none"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-solid w-full !py-4 !rounded-xl mt-2 text-sm shadow-xl shadow-emerald-900/20">Send Request</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <section class="py-24 bg-[var(--bg-secondary)] border-b border-[var(--border-color)]">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[var(--bg-color)] border border-[var(--border-color)] mb-6 rounded-full w-max shadow-sm">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-[var(--accent-color)]">Headquarters</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black leading-tight mb-6 text-[var(--text-main)] tracking-tighter">
+                    Visit Our Global Office
+                </h2>
+                <p class="text-[var(--text-muted)] text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+                    Located in the heart of the financial district. In-person executive coaching sessions and boardroom consultations are held here by appointment only.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch h-full">
+                
+                <div class="lg:col-span-4 bg-[var(--bg-card)] border border-[var(--border-color)] p-8 md:p-10 rounded-3xl shadow-xl flex flex-col justify-center">
+                    <h3 class="text-2xl font-black text-[var(--text-main)] mb-8">New York, NY</h3>
+                    
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-map-marker-alt text-[var(--accent-color)] text-xl mt-1 w-6 text-center shrink-0"></i>
+                            <div>
+                                <h4 class="font-bold text-[var(--text-main)] text-sm uppercase tracking-wider mb-2">Address</h4>
+                                <p class="text-[var(--text-muted)] text-sm leading-relaxed">
+                                    100 Wall Street, Suite 500<br>
+                                    New York, NY 10005<br>
+                                    United States
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-clock text-[var(--accent-color)] text-xl mt-1 w-6 text-center shrink-0"></i>
+                            <div>
+                                <h4 class="font-bold text-[var(--text-main)] text-sm uppercase tracking-wider mb-2">Business Hours</h4>
+                                <p class="text-[var(--text-muted)] text-sm leading-relaxed">
+                                    Mon - Fri: 9:00 AM - 6:00 PM<br>
+                                    Sat - Sun: Closed
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-subway text-[var(--accent-color)] text-xl mt-1 w-6 text-center shrink-0"></i>
+                            <div>
+                                <h4 class="font-bold text-[var(--text-main)] text-sm uppercase tracking-wider mb-2">Transit</h4>
+                                <p class="text-[var(--text-muted)] text-sm leading-relaxed">
+                                    2, 3 trains to Wall St.<br>
+                                    J, Z trains to Broad St.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="https://maps.google.com" target="_blank" class="btn btn-outline w-full mt-10 !rounded-xl !py-3 text-sm">Get Directions <i class="fas fa-arrow-right ml-2"></i></a>
+                </div>
+
+                <div class="lg:col-span-8 relative rounded-3xl overflow-hidden shadow-xl border border-[var(--border-color)] min-h-[400px] lg:min-h-full">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.1834285816914!2d-74.00871302345091!3d40.70519393748286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a165bec391f%3A0xc6ba259bd848b6ec!2s100%20Wall%20St%2C%20New%20York%2C%20NY%2010005!5e0!3m2!1sen!2sus!4v1698246320000!5m2!1sen!2sus" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; position: absolute; top:0; left: 0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-[var(--bg-color)] border-b border-[var(--border-color)]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-black text-[var(--text-main)] mb-4 tracking-tighter">Other Ways to Connect</h2>
+                <p class="text-[var(--text-muted)] text-base md:text-lg">Direct channels for press, partnerships, and career opportunities.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-8 border border-[var(--border-color)] rounded-3xl bg-[var(--bg-secondary)] hover:border-[var(--accent-color)] transition-colors text-center shadow-sm">
+                    <div class="w-14 h-14 bg-[var(--menu-hover-bg)] text-[var(--accent-color)] rounded-full flex items-center justify-center mx-auto mb-5 text-xl">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-[var(--text-main)] mb-2">Press & Media</h4>
+                    <p class="text-sm text-[var(--text-muted)] mb-5 leading-relaxed">For interviews, podcast appearances, and media kit requests.</p>
+                    <a href="mailto:press@growwcoaching.com" class="text-[var(--accent-color)] font-bold text-sm hover:underline tracking-wide">press@growwcoaching.com</a>
+                </div>
+                
+                <div class="p-8 border border-[var(--border-color)] rounded-3xl bg-[var(--bg-secondary)] hover:border-[var(--accent-color)] transition-colors text-center shadow-sm">
+                    <div class="w-14 h-14 bg-[var(--menu-hover-bg)] text-[var(--accent-color)] rounded-full flex items-center justify-center mx-auto mb-5 text-xl">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-[var(--text-main)] mb-2">Partnerships</h4>
+                    <p class="text-sm text-[var(--text-muted)] mb-5 leading-relaxed">For B2B collaborations, sponsorships, and enterprise programs.</p>
+                    <a href="mailto:partners@growwcoaching.com" class="text-[var(--accent-color)] font-bold text-sm hover:underline tracking-wide">partners@growwcoaching.com</a>
+                </div>
+                
+                <div class="p-8 border border-[var(--border-color)] rounded-3xl bg-[var(--bg-secondary)] hover:border-[var(--accent-color)] transition-colors text-center shadow-sm">
+                    <div class="w-14 h-14 bg-[var(--menu-hover-bg)] text-[var(--accent-color)] rounded-full flex items-center justify-center mx-auto mb-5 text-xl">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-[var(--text-main)] mb-2">Careers</h4>
+                    <p class="text-sm text-[var(--text-muted)] mb-5 leading-relaxed">Join our elite global team of executive coaches and strategists.</p>
+                    <a href="careers.html" class="text-[var(--accent-color)] font-bold text-sm hover:underline tracking-wide">View Open Roles</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-10 pt-4">
+                <div class="lg:col-span-4">
+                    <a href="index.html" class="text-2xl font-black tracking-tighter mb-6 block" style="color: var(--text-main); text-decoration: none;">
+                        GrowwCoaching
+                    </a>
+                    <p class="opacity-80 leading-relaxed text-sm mb-6 max-w-sm" style="color: var(--text-muted);">Empowering leaders, transforming mindsets, and delivering unforgettable keynote experiences for Fortune 500 companies worldwide.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="social-link-circle"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link-circle"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link-circle"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4>Expertise</h4>
+                            <ul class="space-y-3">
+                                <li><a href="services.html">Keynote Speaking</a></li>
+                                <li><a href="services.html">Executive Coaching</a></li>
+                                <li><a href="services.html">Corporate Workshops</a></li>
+                                <li><a href="media-kit.html">Media Kit & Assets</a></li>
+                                <li><a href="about.html">Meet the Speaker</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Client Portal</h4>
+                            <ul class="space-y-3">
+                                <li><a href="dashboard-home.html">Dashboard Access</a></li>
+                                <li><a href="video-vault.html">Video Masterclasses</a></li>
+                                <li><a href="login.html">Client Login</a></li>
+                                <li><a href="register.html">Apply for Coaching</a></li>
+                                <li><a href="schedule.html">Manage Schedule</a></li>
+                            </ul>
+                        </div>
+                        <div class="sm:col-span-2 md:col-span-1">
+                            <h4>Booking & Inquiries</h4>
+                            <ul class="space-y-3 text-[var(--text-muted)] text-sm">
+                                <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 shrink-0" style="color: var(--accent-color);"></i><span>Global Reach<br>Based in New York</span></li>
+                                <li class="flex items-center"><i class="fas fa-phone mr-3 shrink-0" style="color: var(--accent-color);"></i><a href="tel:+15551234567" class="break-all">+1 (555) 123-4567</a></li>
+                                <li class="flex items-center"><i class="fas fa-envelope mr-3 shrink-0" style="color: var(--accent-color);"></i><a href="mailto:info@groww.com" class="break-all">info@groww.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom flex flex-col md:flex-row justify-between items-center text-sm gap-4">
+                <p style="color: var(--text-muted);">© 2026 GrowwCoaching Bureau. All rights reserved.</p>
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fullscreen Menu Logic
+        const mobileBtn = document.getElementById('mobile-btn'); 
+        const fullscreenMenu = document.getElementById('fullscreen-menu'); 
+        const closeMenu = document.getElementById('close-menu'); 
+        
+        function toggleMenu() { 
+            fullscreenMenu.classList.toggle('active'); 
+            document.body.style.overflow = fullscreenMenu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+        
+        mobileBtn.onclick = toggleMenu; 
+        closeMenu.onclick = toggleMenu; 
+        
+        // Theme Logic
+        const themeDesktop = document.getElementById('theme-toggle-desktop');
+        const themeMobile = document.getElementById('theme-toggle-mobile'); 
+        const theme = localStorage.getItem('theme') || 'light';
+
+        function updateThemeUI(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode'); 
+                if(themeMobile) themeMobile.classList.add('active');
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeMobile) themeMobile.classList.remove('active');
+            }
+        }
+        
+        updateThemeUI(theme === 'dark');
+        
+        function toggleTheme() { 
+            const isDark = !document.body.classList.contains('dark-mode');
+            updateThemeUI(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
+        }
+        
+        themeDesktop.onclick = toggleTheme; 
+        if(themeMobile) themeMobile.onclick = toggleTheme;
+        
+        // RTL Logic
+        const rtlBtn = document.getElementById('rtl-btn'); 
+        const rtlMobile = document.getElementById('rtl-toggle-mobile'); 
+        const dir = localStorage.getItem('dir') || 'ltr';
+        
+        if (dir === 'rtl') { 
+            document.documentElement.dir = 'rtl'; 
+        }
+        
+        function toggleRTL() { 
+            const isRTL = document.documentElement.dir === 'rtl'; 
+            document.documentElement.dir = isRTL ? 'ltr' : 'rtl'; 
+            localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl'); 
+        }
+        
+        rtlBtn.onclick = toggleRTL; 
+        if(rtlMobile) rtlMobile.onclick = toggleRTL;
+    </script>
+</body>
+</html>

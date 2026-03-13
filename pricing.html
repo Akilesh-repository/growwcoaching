@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - GrowwCoaching</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === RESET & CORE === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* === THEME VARIABLES (Forest: Black, White, Emerald, Lime) === */
+        :root {
+            --bg-color: #FFFFFF;
+            --bg-secondary: #f4f5f4; 
+            --bg-card: #FFFFFF; 
+            --text-main: #000000;
+            --text-muted: #555555;
+            --accent-color: #10B981; 
+            --accent-dark: #059669; 
+            --border-color: #e5e7eb;
+            --nav-bg: rgba(255, 255, 255, 0.90);
+            --drawer-bg: #FFFFFF;
+            --drawer-text: #000000;
+            --menu-hover-bg: rgba(16, 185, 129, 0.1); 
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-color: #000000; 
+            --bg-secondary: #0a0a0a; 
+            --bg-card: #0a0a0a; 
+            --text-main: #FFFFFF; 
+            --text-muted: #a3a3a3;
+            --accent-color: #A3E635; 
+            --accent-dark: #10B981; 
+            --border-color: #262626;
+            --nav-bg: rgba(0, 0, 0, 0.90);
+            --drawer-bg: #000000;
+            --drawer-text: #FFFFFF;
+            --menu-hover-bg: rgba(163, 230, 53, 0.15); 
+        }
+
+        /* RTL SUPPORT */
+        [dir="rtl"] { text-align: right; }
+        [dir="rtl"] .ml-auto { margin-right: auto; margin-left: 0; }
+        [dir="rtl"] .mr-auto { margin-left: auto; margin-right: 0; }
+        [dir="rtl"] .pl-4 { padding-right: 1rem; padding-left: 0; }
+        [dir="rtl"] .fa-arrow-right { transform: rotate(180deg); }
+
+        /* === NAVBAR === */
+        .navbar { 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); 
+            padding: 12px 0; transition: all 0.3s ease;
+        }
+        
+        /* Main Nav Links */
+        .nav-link { 
+            padding: 6px 10px; 
+            color: var(--text-main); 
+            text-decoration: none; 
+            font-size: 12px; 
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: inline-flex; align-items: center; gap: 4px; cursor: pointer; 
+            border-radius: 9999px; 
+        }
+        @media (min-width: 1440px) {
+            .nav-link { padding: 8px 14px; font-size: 13px; gap: 6px; }
+        }
+        
+        .nav-link:hover, .nav-link.active { 
+            color: var(--accent-color); 
+            background-color: var(--menu-hover-bg);
+        }
+        
+        /* Fixed Dropdown Layout */
+        .dropdown { position: relative; display: flex; align-items: center; height: 100%; }
+        .dropdown-menu { 
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px); 
+            margin-top: 5px; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 100; 
+        }
+        .dropdown-inner { 
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; 
+            min-width: 170px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 8px; 
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        
+        /* Clean Dropdown Items */
+        .dropdown-item { 
+            display: block; padding: 8px 12px; 
+            color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600; 
+            border-radius: 6px; transition: all 0.2s; text-align: left; white-space: nowrap;
+        }
+        .dropdown-item:hover { 
+            background: var(--menu-hover-bg); color: var(--accent-color); 
+        }
+
+        /* PILL TOGGLE */
+        .theme-toggle-pill { width: 52px; height: 26px; background: var(--bg-secondary); border-radius: 30px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; border: 1px solid var(--border-color); }
+        .theme-toggle-pill i { font-size: 10px; z-index: 1; }
+        .theme-toggle-pill .fa-sun { color: #f59e0b; }
+        .theme-toggle-pill .fa-moon { color: #999; }
+        .theme-toggle-pill .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 2; }
+        body.dark-mode .theme-toggle-pill .thumb { transform: translateX(26px); background: #333; }
+
+        /* BUTTONS */
+        .btn { padding: 10px 24px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 9999px; }
+        .btn-solid { background: var(--accent-color); color: var(--bg-color); border: 2px solid var(--accent-color); }
+        .btn-solid:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: var(--bg-color); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+        .btn-outline { border: 2px solid var(--text-main); color: var(--text-main); background: transparent; }
+        .btn-outline:hover { background: var(--text-main); color: var(--bg-color); transform: translateY(-2px); }
+
+        /* FULLSCREEN OVERLAY MENU */
+        .fullscreen-menu { 
+            position: fixed; inset: 0; background: var(--drawer-bg); z-index: 1001; 
+            display: flex; flex-direction: column; color: var(--drawer-text); 
+            opacity: 0; visibility: hidden; transform: scale(0.98); 
+            transition: all 0.3s ease; overflow-y: auto; 
+        }
+        .fullscreen-menu.active { opacity: 1; visibility: visible; transform: scale(1); }
+        
+        .mobile-link { 
+            font-size: 1.125rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; 
+            color: var(--text-main); text-decoration: none; transition: all 0.3s; 
+        }
+        .mobile-link:hover { color: var(--accent-color); }
+
+        /* FOOTER */
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding-top: 80px; }
+        footer h4 { color: var(--text-main); font-weight: 800; font-size: 1.1rem; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;} 
+        footer a, footer li, footer span { color: var(--text-muted); text-decoration: none; transition: all 0.3s; font-size: 0.95rem; }
+        footer a:hover { color: var(--accent-color); }
+        .social-link-circle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: all 0.3s; color: var(--text-main); background: var(--bg-card); }
+        .social-link-circle:hover { background: var(--accent-color); color: var(--bg-color); border-color: var(--accent-color); transform: translateY(-3px); }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding: 24px 0; margin-top: 60px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 w-full flex items-center justify-between gap-2 lg:gap-4">
+            
+            <div class="flex items-center shrink-0">
+                <a href="index.html" class="text-xl lg:text-2xl font-black tracking-tighter" style="color: var(--text-main); text-decoration: none;">
+                    GrowwCoaching
+                </a>
+            </div>
+            
+            <div class="hidden xl:flex flex-1 justify-center items-center gap-0.5">
+                <div class="dropdown">
+                    <div class="nav-link">Home <i class="fas fa-chevron-down text-[8px]"></i></div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <a href="index.html" class="dropdown-item">Home Page 1</a>
+                            <a href="home-2.html" class="dropdown-item">Home Page 2</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="pricing.html" class="nav-link active">Pricing</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <div class="dropdown">
+                    <div class="nav-link">Dashboard <i class="fas fa-chevron-down text-[8px]"></i></div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <a href="user.html" class="dropdown-item">User Dashboard</a>
+                            <a href="admin.html" class="dropdown-item">Admin Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden xl:flex items-center justify-end shrink-0 gap-3">
+                <a href="login.html" class="text-[11px] font-bold uppercase tracking-wide text-[var(--text-muted)] hover:text-[var(--accent-color)] transition-colors px-1">Login</a>
+                <a href="register.html" class="btn btn-solid !py-2 !px-4 !text-[11px]">Register</a>
+                
+                <div class="w-px h-4 bg-[var(--border-color)] mx-1"></div>
+                
+                <button id="rtl-btn" class="text-[9px] font-black text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-secondary)] transition-all uppercase tracking-widest border border-[var(--border-color)] px-2 py-1.5 rounded-full">RTL</button>
+                
+                <div id="theme-toggle-desktop" class="theme-toggle-pill" title="Toggle Dark Mode">
+                    <i class="fas fa-sun"></i><i class="fas fa-moon"></i><div class="thumb"></div>
+                </div>
+            </div>
+
+            <div class="xl:hidden flex items-center justify-end w-auto">
+                <button id="mobile-btn" class="w-9 h-9 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] transition-all">
+                    <i class="fas fa-bars text-sm"></i>
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="fullscreen-menu" id="fullscreen-menu">
+        <div class="w-full px-6 py-4 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+            <span class="text-xl font-black tracking-tighter">GrowwCoaching</span>
+            <button id="close-menu" class="w-9 h-9 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-[var(--bg-color)] transition-all">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center justify-start space-y-4 py-8 w-full max-w-md mx-auto text-center px-6 my-auto shrink-0">
+            <a href="index.html" class="mobile-link">Home Page 1</a>
+            <a href="home-2.html" class="mobile-link">Home Page 2</a>
+            <a href="about.html" class="mobile-link">About</a>
+            <a href="services.html" class="mobile-link">Services</a>
+            <a href="pricing.html" class="mobile-link" style="color: var(--accent-color);">Pricing</a>
+            <a href="blog.html" class="mobile-link">Blog</a>
+            <a href="faq.html" class="mobile-link">FAQ</a>
+            <a href="contact.html" class="mobile-link">Contact</a>
+            
+            <div class="w-12 h-px bg-[var(--border-color)] my-1"></div>
+            
+            <a href="user.html" class="mobile-link !text-sm text-[var(--text-muted)]">User Dashboard</a>
+            <a href="admin.html" class="mobile-link !text-sm text-[var(--text-muted)]">Admin Dashboard</a>
+        </div>
+
+        <div class="w-full px-6 py-5 border-t border-[var(--border-color)] flex flex-col gap-4 shrink-0">
+            <div class="flex justify-between items-center max-w-md mx-auto w-full">
+                <div class="flex items-center gap-3">
+                    <span class="text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">Theme:</span>
+                    <div id="theme-toggle-mobile" class="theme-toggle-pill"><i class="fas fa-sun"></i><i class="fas fa-moon"></i><div class="thumb"></div></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">Layout:</span>
+                    <button id="rtl-toggle-mobile" class="text-[10px] font-black text-[var(--text-main)] bg-[var(--bg-secondary)] border border-[var(--border-color)] px-3 py-1.5 rounded-full hover:border-[var(--accent-color)]">LTR / RTL</button>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto">
+                <a href="login.html" class="btn btn-outline w-full !rounded-xl !py-3">Client Login</a>
+                <a href="register.html" class="btn btn-solid w-full !rounded-xl !py-3">Register Now</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="relative w-full overflow-hidden flex flex-col justify-start min-h-[100vh] sm:min-h-[800px] pt-[120px] lg:pt-[160px] pb-16">
+        
+        <div class="absolute inset-0 z-0">
+            <img src="images/pexels-alphatradezone-5833348.jpg" alt="Business Strategy and Pricing" class="w-full h-full object-cover object-center" />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-[var(--bg-color)]"></div>
+        </div>
+        
+        <div class="relative z-10 w-full max-w-5xl mx-auto px-6 text-center mt-auto mb-auto">
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-black/40 backdrop-blur-md border border-white/20 mb-4 sm:mb-8 rounded-full">
+                <span class="flex h-2 w-2 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                <span class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-white">Investment Plans</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.15] sm:leading-[1.05] mb-4 sm:mb-8 text-white tracking-tighter">
+                Transparent Pricing.<br>
+                <span class="text-[var(--accent-color)] relative inline-block mt-1 sm:mt-2">
+                    Exponential ROI.
+                </span>
+            </h1>
+            
+            <p class="text-gray-300 text-sm sm:text-lg lg:text-xl leading-relaxed mb-6 sm:mb-12 max-w-3xl mx-auto font-medium">
+                Invest in the mental architecture and strategic frameworks that scale your leadership and revenue. No hidden fees. Just uncompromising results.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center mb-8 sm:mb-16 w-full max-w-md sm:max-w-none mx-auto">
+                <a href="#pricing-tiers" class="btn btn-solid shadow-2xl shadow-emerald-900/30 text-xs sm:text-sm px-5 py-3 sm:px-8 sm:py-4 w-full sm:w-auto">Explore Tiers</a>
+                <a href="#custom-plans" class="btn border-2 border-white/30 text-white hover:bg-white hover:text-black backdrop-blur-sm text-xs sm:text-sm px-5 py-3 sm:px-8 sm:py-4 w-full sm:w-auto">Custom Packages</a>
+            </div>
+
+            <div class="flex flex-row flex-wrap justify-center items-center gap-6 sm:gap-12 md:gap-16 text-white pt-6 sm:pt-8 border-t border-white/10 max-w-3xl mx-auto">
+                
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center text-[var(--accent-color)] backdrop-blur-sm border border-white/10">
+                        <i class="fas fa-check-double text-xs sm:text-lg"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-base sm:text-xl font-black leading-tight">100%</p>
+                        <p class="text-[9px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold">Transparent</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center text-[var(--accent-color)] backdrop-blur-sm border border-white/10">
+                        <i class="fas fa-handshake text-xs sm:text-lg"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-base sm:text-xl font-black leading-tight">Custom</p>
+                        <p class="text-[9px] sm:text-xs text-gray-400 uppercase tracking-widest font-bold">Packages</p>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </section>
+
+    <section id="pricing-tiers" class="py-24 lg:py-32 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] scroll-mt-20">
+        <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+            
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[var(--bg-color)] border border-[var(--border-color)] mb-6 rounded-full w-max shadow-sm">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-[var(--text-main)]">Pricing Tiers</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black leading-tight mb-6 text-[var(--text-main)] tracking-tighter">
+                    Choose Your Growth Path
+                </h2>
+                <p class="text-[var(--text-muted)] text-base md:text-lg leading-relaxed">
+                    Select the tier that matches your current leadership bottlenecks and future revenue goals. Upgrade your plan at any time.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
+                
+                <div class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 md:p-10 flex flex-col h-full hover:-translate-y-2 transition-all duration-300 shadow-lg">
+                    <div class="w-14 h-14 bg-[var(--menu-hover-bg)] rounded-2xl flex items-center justify-center text-[var(--accent-color)] mb-6 text-2xl">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-[var(--text-main)] mb-2">The Vault</h3>
+                    <p class="text-sm text-[var(--text-muted)] mb-8">Self-paced digital masterclasses and workbooks for emerging leaders.</p>
+                    
+                    <div class="mb-8">
+                        <span class="text-4xl font-black text-[var(--text-main)]">$99</span>
+                        <span class="text-sm font-medium text-[var(--text-muted)]">/month</span>
+                    </div>
+
+                    <ul class="space-y-4 mb-10 border-t border-[var(--border-color)] pt-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Access to all recorded keynotes
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Monthly Group Q&A Calls
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Downloadable PDF Frameworks
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium opacity-50">
+                            <i class="fas fa-times text-[var(--text-muted)] mt-1"></i> No 1-on-1 Coaching
+                        </li>
+                    </ul>
+                    
+                    <a href="register.html" class="btn btn-outline w-full !py-4 mt-auto">Subscribe Now</a>
+                </div>
+                
+                <div class="bg-[var(--text-main)] border-2 border-[var(--accent-color)] rounded-3xl p-8 md:p-10 flex flex-col h-full hover:-translate-y-2 transition-all duration-300 shadow-[0_10px_40px_-10px_rgba(16,185,129,0.3)] relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-[var(--accent-color)] text-white text-[10px] font-bold uppercase tracking-widest px-6 py-2 rounded-bl-2xl z-10">
+                        Most Popular
+                    </div>
+                    
+                    <div class="w-14 h-14 bg-[var(--accent-color)] rounded-2xl flex items-center justify-center text-white mb-6 text-2xl relative z-10">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-[var(--bg-color)] mb-2 relative z-10">Executive Sprint</h3>
+                    <p class="text-sm text-gray-400 mb-8 relative z-10">Intensive 1-on-1 mentorship for founders and C-suite leaders.</p>
+                    
+                    <div class="mb-8 relative z-10">
+                        <span class="text-4xl font-black text-[var(--bg-color)]">$5,000</span>
+                        <span class="text-sm font-medium text-gray-400">/month</span>
+                        <p class="text-xs text-gray-500 mt-2">6-month minimum commitment</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-10 border-t border-gray-800 pt-8 flex-1 relative z-10">
+                        <li class="flex items-start gap-3 text-sm text-[var(--bg-color)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Bi-Weekly 90-Minute Strategy Calls
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--bg-color)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Direct Slack/Voxer Access (24/7)
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--bg-color)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> 360° Leadership Assessment
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--bg-color)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Full Digital Vault Access
+                        </li>
+                    </ul>
+                    
+                    <a href="contact.html" class="btn btn-solid w-full !py-4 mt-auto relative z-10">Apply For Coaching</a>
+                </div>
+                
+                <div class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl p-8 md:p-10 flex flex-col h-full hover:-translate-y-2 transition-all duration-300 shadow-lg relative">
+                    <div class="w-14 h-14 bg-[var(--menu-hover-bg)] rounded-2xl flex items-center justify-center text-[var(--accent-color)] mb-6 text-2xl">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-[var(--text-main)] mb-2">Team Workshop</h3>
+                    <p class="text-sm text-[var(--text-muted)] mb-8">Interactive full-day sessions to align your entire organization.</p>
+                    
+                    <div class="mb-8">
+                        <span class="text-4xl font-black text-[var(--text-main)]">$12k</span>
+                        <span class="text-sm font-medium text-[var(--text-muted)]">/day</span>
+                        <p class="text-xs text-[var(--text-muted)] mt-2">Plus travel & accommodations</p>
+                    </div>
+
+                    <ul class="space-y-4 mb-10 border-t border-[var(--border-color)] pt-8 flex-1">
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Pre-Workshop Cultural Audit
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> Conflict Resolution Frameworks
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> High-Ticket Sales Mastery
+                        </li>
+                        <li class="flex items-start gap-3 text-sm text-[var(--text-main)] font-medium">
+                            <i class="fas fa-check text-[var(--accent-color)] mt-1"></i> 30-Day Follow Up Accountability
+                        </li>
+                    </ul>
+                    
+                    <a href="contact.html" class="btn btn-outline w-full !py-4 mt-auto">Book a Workshop</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="custom-plans" class="py-24 lg:py-32 bg-[var(--bg-color)]">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="relative w-full rounded-[3rem] overflow-hidden shadow-2xl border border-[var(--border-color)] mb-20">
+                <div class="absolute inset-0 z-0">
+                    <img src="images/pexels-cottonbro-6767043.jpg" alt="Corporate Team Coaching" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/30"></div>
+                </div>
+                
+                <div class="relative z-10 p-10 md:p-16 lg:p-24 flex flex-col justify-center max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 mb-6 rounded-full w-max shadow-sm">
+                        <span class="flex h-2 w-2 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-white">For Large Organizations</span>
+                    </div>
+                    
+                    <h2 class="text-3xl md:text-5xl font-black leading-tight mb-6 text-white tracking-tighter">
+                        Enterprise & Custom Retainers.
+                    </h2>
+                    
+                    <p class="text-gray-300 text-base md:text-lg leading-relaxed mb-10">
+                        Does your company require a hybrid approach? We offer bespoke annual retainers that combine quarterly keynotes, monthly executive coaching for your C-Suite, and unlimited Video Vault access for your entire employee base. Let's engineer a custom growth infrastructure.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="contact.html" class="btn btn-solid !py-4 !px-8 shadow-xl shadow-emerald-900/30">Request Enterprise Pricing</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl md:text-4xl font-black text-[var(--text-main)] mb-4">Included in every engagement.</h3>
+                    <p class="text-[var(--text-muted)] text-base">Regardless of the tier, every GrowwCoaching client receives our foundational benefits.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    
+                    <div class="bg-[var(--bg-secondary)] p-8 rounded-2xl border border-[var(--border-color)] transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-[var(--accent-color)] group">
+                        <div class="w-12 h-12 bg-[var(--menu-hover-bg)] rounded-xl flex items-center justify-center text-[var(--accent-color)] mx-auto mb-5 text-xl transition-all duration-300 group-hover:bg-[var(--accent-color)] group-hover:text-white">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-[var(--text-main)] mb-2">NDA Protection</h4>
+                        <p class="text-sm text-[var(--text-muted)]">Absolute confidentiality regarding your business metrics and personal strategies.</p>
+                    </div>
+                    
+                    <div class="bg-[var(--bg-secondary)] p-8 rounded-2xl border border-[var(--border-color)] transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-[var(--accent-color)] group">
+                        <div class="w-12 h-12 bg-[var(--menu-hover-bg)] rounded-xl flex items-center justify-center text-[var(--accent-color)] mx-auto mb-5 text-xl transition-all duration-300 group-hover:bg-[var(--accent-color)] group-hover:text-white">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-[var(--text-main)] mb-2">Resource Library</h4>
+                        <p class="text-sm text-[var(--text-muted)]">Access to proprietary templates, meeting agendas, and hiring rubrics.</p>
+                    </div>
+                    
+                    <div class="bg-[var(--bg-secondary)] p-8 rounded-2xl border border-[var(--border-color)] transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-[var(--accent-color)] group">
+                        <div class="w-12 h-12 bg-[var(--menu-hover-bg)] rounded-xl flex items-center justify-center text-[var(--accent-color)] mx-auto mb-5 text-xl transition-all duration-300 group-hover:bg-[var(--accent-color)] group-hover:text-white">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-[var(--text-main)] mb-2">Client Support</h4>
+                        <p class="text-sm text-[var(--text-muted)]">Dedicated concierge support for billing, scheduling, and platform access.</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-10 pt-4">
+                <div class="lg:col-span-4">
+                    <a href="index.html" class="text-2xl font-black tracking-tighter mb-6 block" style="color: var(--text-main); text-decoration: none;">
+                        GrowwCoaching
+                    </a>
+                    <p class="opacity-80 leading-relaxed text-sm mb-6 max-w-sm" style="color: var(--text-muted);">Empowering leaders, transforming mindsets, and delivering unforgettable keynote experiences for Fortune 500 companies worldwide.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="social-link-circle"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link-circle"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link-circle"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4>Expertise</h4>
+                            <ul class="space-y-3">
+                                <li><a href="services.html">Keynote Speaking</a></li>
+                                <li><a href="services.html">Executive Coaching</a></li>
+                                <li><a href="services.html">Corporate Workshops</a></li>
+                                <li><a href="media-kit.html">Media Kit & Assets</a></li>
+                                <li><a href="about.html">Meet the Speaker</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Client Portal</h4>
+                            <ul class="space-y-3">
+                                <li><a href="dashboard-home.html">Dashboard Access</a></li>
+                                <li><a href="video-vault.html">Video Masterclasses</a></li>
+                                <li><a href="login.html">Client Login</a></li>
+                                <li><a href="register.html">Apply for Coaching</a></li>
+                                <li><a href="schedule.html">Manage Schedule</a></li>
+                            </ul>
+                        </div>
+                        <div class="sm:col-span-2 md:col-span-1">
+                            <h4>Booking & Inquiries</h4>
+                            <ul class="space-y-3 text-[var(--text-muted)] text-sm">
+                                <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 shrink-0" style="color: var(--accent-color);"></i><span>Global Reach<br>Based in New York</span></li>
+                                <li class="flex items-center"><i class="fas fa-phone mr-3 shrink-0" style="color: var(--accent-color);"></i><a href="tel:+15551234567" class="break-all">+1 (555) 123-4567</a></li>
+                                <li class="flex items-center"><i class="fas fa-envelope mr-3 shrink-0" style="color: var(--accent-color);"></i><a href="mailto:info@groww.com" class="break-all">info@groww.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom flex flex-col md:flex-row justify-between items-center text-sm gap-4">
+                <p style="color: var(--text-muted);">&copy; 2026 GrowwCoaching Bureau. All rights reserved.</p>
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fullscreen Menu Logic
+        const mobileBtn = document.getElementById('mobile-btn'); 
+        const fullscreenMenu = document.getElementById('fullscreen-menu'); 
+        const closeMenu = document.getElementById('close-menu'); 
+        
+        function toggleMenu() { 
+            fullscreenMenu.classList.toggle('active'); 
+            document.body.style.overflow = fullscreenMenu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+        
+        mobileBtn.onclick = toggleMenu; 
+        closeMenu.onclick = toggleMenu; 
+        
+        // Theme Logic
+        const themeDesktop = document.getElementById('theme-toggle-desktop');
+        const themeMobile = document.getElementById('theme-toggle-mobile'); 
+        const theme = localStorage.getItem('theme') || 'light';
+
+        function updateThemeUI(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode'); 
+                if(themeMobile) themeMobile.classList.add('active');
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeMobile) themeMobile.classList.remove('active');
+            }
+        }
+        
+        updateThemeUI(theme === 'dark');
+        
+        function toggleTheme() { 
+            const isDark = !document.body.classList.contains('dark-mode');
+            updateThemeUI(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
+        }
+        
+        themeDesktop.onclick = toggleTheme; 
+        if(themeMobile) themeMobile.onclick = toggleTheme;
+        
+        // RTL Logic
+        const rtlBtn = document.getElementById('rtl-btn'); 
+        const rtlMobile = document.getElementById('rtl-toggle-mobile'); 
+        const dir = localStorage.getItem('dir') || 'ltr';
+        
+        if (dir === 'rtl') { 
+            document.documentElement.dir = 'rtl'; 
+        }
+        
+        function toggleRTL() { 
+            const isRTL = document.documentElement.dir === 'rtl'; 
+            document.documentElement.dir = isRTL ? 'ltr' : 'rtl'; 
+            localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl'); 
+        }
+        
+        rtlBtn.onclick = toggleRTL; 
+        if(rtlMobile) rtlMobile.onclick = toggleRTL;
+    </script>
+</body>
+</html>

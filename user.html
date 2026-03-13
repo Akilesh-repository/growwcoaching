@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard | GrowwCoaching</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: ['class', '.dark-mode'],
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        emerald: {
+                            500: '#10B981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* =========================================
+           CORE STYLES & VARIABLES
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body { 
+            height: 100%;
+            height: 100dvh; 
+            overflow-x: hidden; 
+            background-color: var(--dash-bg);
+            color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        :root {
+            --bg-color: #ffffff;
+            --dash-bg: #f4f4f5; 
+            --text-main: #000000; 
+            --text-muted: #555555;
+            --accent-color: #10B981; /* Emerald */
+            --accent-dark: #059669;  
+            --border-color: #e5e5e5;
+            --sidebar-width: 280px;
+            --card-bg: #ffffff;
+            --card-hover: #fafafa;
+            --radius: 16px; 
+            --shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
+            --shadow-hover: 0 10px 25px -5px rgba(16, 185, 129, 0.15);
+        }
+
+        body.dark-mode {
+            --dash-bg: #0a0a0a;
+            --text-main: #ffffff;
+            --text-muted: #a3a3a3;
+            --border-color: #262626;
+            --card-bg: #171717;
+            --card-hover: #1f1f1f;
+            --accent-color: #A3E635; /* Lime for dark mode */
+            --accent-dark: #10B981;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            --shadow-hover: 0 10px 25px -5px rgba(163, 230, 53, 0.15);
+        }
+
+        /* RTL SUPPORT */
+        [dir="rtl"] { text-align: right; }
+        [dir="rtl"] .ml-auto { margin-right: auto; margin-left: 0; }
+        [dir="rtl"] .mr-3 { margin-left: 0.75rem; margin-right: 0; }
+        [dir="rtl"] .ml-3 { margin-right: 0.75rem; margin-left: 0; }
+        
+        /* UI UTILITIES */
+        .dash-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .dash-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-color);
+        }
+        
+        /* LAYOUT */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            height: 100dvh; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 32px 16px;
+            overflow-y: auto; 
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+        }
+        [dir="rtl"] .sidebar { left: auto; right: 0; border-right: none; border-left: 1px solid var(--border-color); }
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            transition: margin 0.3s ease;
+        }
+        [dir="rtl"] .main-wrapper { margin-left: 0; margin-right: var(--sidebar-width); }
+
+        .topbar {
+            height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: var(--dash-bg); 
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .content-area {
+            padding: 0 40px 40px 40px;
+            flex-grow: 1;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            [dir="rtl"] .sidebar { transform: translateX(100%); }
+            [dir="rtl"] .sidebar.active { transform: translateX(0); }
+
+            .main-wrapper { margin-left: 0 !important; margin-right: 0 !important; }
+            .topbar { padding: 0 24px; }
+            .content-area { padding: 0 24px 24px 24px; }
+            
+            /* Show Hamburger on smaller screens */
+            .hamburger-btn { display: block !important; }
+        }
+
+        @media (max-width: 640px) {
+            .content-area { padding: 0 16px 24px 16px; }
+            .topbar { padding: 0 16px; }
+        }
+
+        /* OVERLAYS & TOGGLES */
+        .sidebar-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
+            z-index: 45; display: none; opacity: 0; transition: opacity 0.3s;
+        }
+        .sidebar-overlay.active { display: block; opacity: 1; }
+        
+        /* EXACT HAMBURGER BUTTON STYLING */
+        .hamburger-btn { display: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; background: none; border: none; }
+
+        /* SIDEBAR NAVIGATION */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            border-radius: 8px; 
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        
+        .nav-item i { width: 24px; font-size: 1.1rem; text-align: center; margin-right: 14px; transition: transform 0.2s; }
+        [dir="rtl"] .nav-item i { margin-right: 0; margin-left: 14px; }
+        
+        .nav-item:hover { color: var(--text-main); background: var(--dash-bg); }
+        
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0 8px 8px 0;
+        }
+        [dir="rtl"] .nav-item.active {
+            border-left: none;
+            border-right: 4px solid var(--accent-color);
+            border-radius: 8px 0 0 8px;
+        }
+        .nav-item.active i { color: var(--accent-color); }
+
+        /* TOPBAR BUTTONS */
+        .icon-btn {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); background: var(--card-bg); 
+            border: 1px solid var(--border-color);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .icon-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+
+        /* FIXED HERO BANNER - ALWAYS DEEP EDITORIAL DARK */
+        .hero-banner {
+            background-color: #09090b; 
+            color: #ffffff; 
+            border-radius: var(--radius);
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .hero-banner {
+            background-color: #121212;
+            border: 1px solid var(--border-color);
+        }
+        .hero-banner::before {
+            content: ''; position: absolute; right: -10%; top: -50%;
+            width: 300px; height: 300px; background: var(--accent-color);
+            border-radius: 50%; filter: blur(80px); opacity: 0.25;
+        }
+        .hero-banner-pattern {
+            position: absolute; inset: 0; opacity: 0.1; pointer-events: none;
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* PROGRESS BARS */
+        .progress-bg { width: 100%; background-color: var(--dash-bg); border-radius: 999px; height: 6px; overflow: hidden; margin-top: 12px; }
+        .progress-fill { background-color: var(--accent-color); height: 100%; border-radius: 999px; transition: width 1s ease-in-out;}
+
+        /* FIXED TABLE & BUTTONS */
+        .clean-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; }
+        [dir="rtl"] .clean-table { text-align: right; }
+        .clean-table th, .clean-table td { white-space: nowrap; }
+        
+        .clean-table th { padding: 16px; color: var(--text-muted); font-weight: 700; font-size: 0.75rem; background: var(--dash-bg); text-transform: uppercase; letter-spacing: 1px; }
+        .clean-table th:first-child { border-radius: 8px 0 0 8px; }
+        .clean-table th:last-child { border-radius: 0 8px 8px 0; }
+        [dir="rtl"] .clean-table th:first-child { border-radius: 0 8px 8px 0; }
+        [dir="rtl"] .clean-table th:last-child { border-radius: 8px 0 0 8px; }
+        
+        .clean-table td { padding: 16px; color: var(--text-main); font-weight: 500; font-size: 0.95rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .clean-table tr:last-child td { border-bottom: none; }
+        
+        .status-badge { padding: 6px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px; }
+        .badge-success { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .badge-warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .badge-info { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+        /* PERFECTLY SIZED TABLE BUTTONS */
+        .btn-sm { 
+            padding: 0 16px; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 145px; /* Fixed width to guarantee uniform size */
+            height: 38px;
+            white-space: nowrap; /* Prevent wrapping */
+            box-sizing: border-box;
+        }
+        .btn-action { background: var(--accent-color); color: #000; border: 1px solid var(--accent-color); }
+        .btn-action:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; }
+        .btn-outline-table { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-outline-table:hover { border-color: var(--text-main); background: var(--dash-bg); }
+        .btn-disabled { background: var(--dash-bg); color: var(--text-muted); border: 1px solid var(--border-color); cursor: not-allowed; opacity: 0.6; }
+
+        /* CHAT UI */
+        .chat-bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; max-width: 85%; }
+        .chat-editor { background: var(--dash-bg); color: var(--text-main); border-bottom-left-radius: 2px; }
+        .chat-author { background: var(--accent-color); color: #000; border-bottom-right-radius: 2px; margin-left: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="mb-12 px-4">
+            <a href="index.html" class="text-2xl font-black tracking-tighter block" style="color: var(--text-main); text-decoration: none;">
+                GrowwCoaching
+            </a>
+        </div>
+        
+        <nav class="flex-grow">
+            <p class="text-xs font-bold uppercase tracking-widest mb-3 px-4" style="color: var(--text-muted);">Workspace</p>
+            <a href="user.html" class="nav-item active"><i class="fas fa-columns"></i> Dashboard</a>
+            
+            <a href="#" class="nav-item">
+                <i class="fas fa-video"></i> Video Vault 
+                <span class="ml-auto bg-[var(--accent-color)] text-black text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
+            </a>
+            <a href="#" class="nav-item"><i class="fas fa-calendar-check"></i> Session Log</a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-comments"></i> Coach Chat 
+                <span class="ml-auto bg-[var(--border-color)] text-[var(--text-main)] text-[10px] px-2 py-0.5 rounded-full font-bold">1</span>
+            </a>
+            
+            <p class="text-xs font-bold uppercase tracking-widest mt-10 mb-3 px-4" style="color: var(--text-muted);">Account</p>
+            <a href="#" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Billing & Invoices</a>
+            <a href="#" class="nav-item"><i class="fas fa-user-edit"></i> Profile Details</a>
+            <a href="contact.html" class="nav-item"><i class="fas fa-headset"></i> Support</a>
+            
+            <a href="login.html" class="nav-item mt-10 text-[var(--accent-color)] hover:bg-[var(--dash-bg)]">
+                <i class="fas fa-sign-out-alt text-[var(--accent-color)]"></i> Log Out
+            </a>
+        </nav>
+    </aside>
+
+    <div class="main-wrapper">
+        
+        <header class="topbar">
+            <div class="flex items-center gap-4">
+                <button class="hamburger-btn" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                
+                <div class="hidden md:flex items-center rounded-lg px-4 py-2.5 w-80 transition-colors focus-within:ring-2 ring-[var(--accent-color)]" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+                    <i class="fas fa-search text-[var(--text-muted)] mr-3"></i>
+                    <input type="text" placeholder="Search sessions, vaults, or messages..." class="bg-transparent border-none outline-none w-full text-sm font-medium text-[var(--text-main)] placeholder-[var(--text-muted)]">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 md:gap-5">
+                <button class="icon-btn" id="rtl-toggle" title="Toggle RTL"><i class="fas fa-align-right"></i></button>
+                <button class="icon-btn" id="theme-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+                
+                <div class="relative cursor-pointer group">
+                    <button class="icon-btn relative">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-[var(--accent-color)] rounded-full border-2 border-[var(--card-bg)]"></span>
+                    </button>
+                </div>
+
+                <div class="w-px h-8 mx-1 bg-[var(--border-color)]"></div>
+                
+                <div class="flex items-center gap-3 cursor-pointer bg-[var(--card-bg)] border border-[var(--border-color)] pl-2 pr-4 py-1.5 rounded-full hover:border-[var(--text-main)] transition-colors">
+                    <img src="https://ui-avatars.com/api/?name=David+O&background=10B981&color=000&bold=true" alt="Client" class="w-8 h-8 rounded-full border border-[var(--border-color)]">
+                    <div class="hidden md:block text-left">
+                        <p class="text-sm font-bold text-[var(--text-main)] leading-tight">David O.</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs text-[var(--text-muted)] ml-2"></i>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-area">
+            
+            <div class="hero-banner mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 p-8 md:p-12">
+                <div class="hero-banner-pattern"></div>
+                <div class="relative z-10">
+                    <span class="inline-block border border-white/50 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4">Program Active</span>
+                    <h1 class="text-3xl md:text-4xl font-black mb-2 tracking-tight text-white">Phase 2: Operational Scaling</h1>
+                    <p class="text-gray-300 text-base max-w-xl font-medium">Your coach, <strong class="text-[var(--accent-color)]">Sarah Jenkins</strong>, has uploaded the new "Architecture of Delegation" framework to your vault.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10">
+                    <button class="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black px-6 py-3 font-bold text-sm uppercase tracking-wide transition-all rounded-md">View Framework</button>
+                    <button class="w-full sm:w-auto bg-[var(--accent-color)] hover:bg-[var(--accent-dark)] text-black border-2 border-[var(--accent-color)] hover:border-[var(--accent-dark)] px-6 py-3 font-bold text-sm uppercase tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 rounded-md">
+                        <i class="fas fa-calendar-plus"></i> Next Session: Oct 18
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                
+                <div class="dash-card p-6 flex flex-col justify-center">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Program Progress</p>
+                        <i class="fas fa-chart-line text-[var(--text-muted)]"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">68%</h3>
+                    <div class="mt-3">
+                        <div class="progress-bg"><div class="progress-fill" style="width: 68%;"></div></div>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Month 4 of 6</p>
+                    </div>
+                </div>
+
+                <div class="dash-card p-6 flex flex-col justify-center">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Live Hours Logged</p>
+                        <i class="fas fa-clock text-[var(--text-muted)]"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18.5 <span class="text-lg text-[var(--text-muted)]">hrs</span></h3>
+                    <div class="mt-3">
+                        <div class="progress-bg"><div class="progress-fill" style="width: 45%; background-color: var(--text-main);"></div></div>
+                        <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">+2.0 hours this week</p>
+                    </div>
+                </div>
+
+                <div class="dash-card p-6 flex flex-col justify-between border-l-4 border-l-[var(--accent-color)]">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Pending Action</p>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-color);">Required</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[var(--text-main)] mt-1">Phase 3 Assessment</h3>
+                    <p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-1">Please complete the team performance evaluation form.</p>
+                    <a href="#" class="text-[var(--accent-color)] font-bold text-sm mt-3 hover:underline flex items-center gap-1">Review & Submit <i class="fas fa-arrow-right text-xs"></i></a>
+                </div>
+
+                <div class="dash-card p-6 flex items-center gap-4">
+                    <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Coach" class="w-16 h-16 rounded-full object-cover border-2 border-[var(--border-color)] object-top">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Lead Coach</p>
+                        <h3 class="text-lg font-bold text-[var(--text-main)] leading-tight">Sarah Jenkins</h3>
+                        <p class="text-xs text-[#10b981] font-bold mt-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online Now</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-2 dash-card flex flex-col min-w-0">
+                    <div class="p-6 border-b border-[var(--border-color)] flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-[var(--text-main)]">Session Log & Deliverables</h3>
+                            <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Track your 1-on-1 history and download materials.</p>
+                        </div>
+                        <button class="btn-sm btn-outline-table w-auto min-w-0 !px-4"><i class="fas fa-download mr-1"></i> Download All</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto flex-grow w-full">
+                        <table class="clean-table min-w-[700px]">
+                            <thead>
+                                <tr>
+                                    <th>Session Focus</th>
+                                    <th>Date</th>
+                                    <th>Material</th>
+                                    <th>Status</th>
+                                    <th style="text-align: center; width: 170px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">1. Vision Alignment</span></td>
+                                    <td>Sep 10</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm"><i class="fas fa-file-pdf text-[var(--text-muted)] opacity-50 mr-1"></i> Audit Checklist</span></td>
+                                    <td><span class="status-badge badge-success">Complete</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">2. The Energy Audit</span></td>
+                                    <td>Sep 24</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm"><i class="fas fa-file-excel text-[var(--text-muted)] opacity-50 mr-1"></i> Tracker</span></td>
+                                    <td><span class="status-badge badge-success">Complete</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table">Watch Replay</button></td>
+                                </tr>
+                                <tr style="background: rgba(16, 185, 129, 0.05);">
+                                    <td><span class="font-bold text-[var(--text-main)]">3. Team Architecture</span></td>
+                                    <td>Oct 18</td>
+                                    <td><span class="text-[var(--accent-color)] font-bold text-sm"><i class="fas fa-project-diagram mr-1"></i> Miro Board</span></td>
+                                    <td><span class="status-badge badge-warning">Upcoming</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-action">Join Zoom</button></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="font-bold text-[var(--text-main)]">4. High-Ticket Pitch</span></td>
+                                    <td>Nov 02</td>
+                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
+                                    <td><span class="status-badge badge-info">Locked</span></td>
+                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-8">
+                    
+                    <div class="dash-card flex flex-col h-[400px]">
+                        <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px]">
+                            <h3 class="font-bold text-[var(--text-main)] flex items-center gap-2">
+                                <i class="fas fa-comment-alt text-[var(--accent-color)]"></i> Coach Chat
+                            </h3>
+                            <i class="fas fa-ellipsis-h text-[var(--text-muted)] cursor-pointer hover:text-[var(--text-main)] transition-colors"></i>
+                        </div>
+                        
+                        <div class="flex-grow p-4 overflow-y-auto space-y-4 bg-[var(--bg-color)]">
+                            <p class="text-center text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold">Yesterday</p>
+                            
+                            <div class="flex flex-col items-start">
+                                <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:22 PM</span>
+                                <div class="chat-bubble chat-editor border border-[var(--border-color)]">
+                                    David, incredible progress on your delegation targets this week. Remember the golden rule: Do only what only you can do.
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col items-start mt-2">
+                                <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:23 PM</span>
+                                <div class="chat-bubble chat-editor border border-[var(--border-color)]">
+                                    Review the Architecture Framework I just unlocked before our call on the 18th. Let's map out your org chart together.
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-end mt-2">
+                                <span class="text-[10px] text-[var(--text-muted)] mb-1 mr-1 font-bold">You • 15:45 PM</span>
+                                <div class="chat-bubble chat-author">
+                                    Got it! I've already drafted a rough version on Miro. Will send it over shortly.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 border-t border-[var(--border-color)] bg-[var(--card-bg)] rounded-b-[15px] flex items-center gap-2">
+                            <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] p-2 transition-colors"><i class="fas fa-paperclip"></i></button>
+                            <input type="text" placeholder="Message Sarah..." class="flex-grow bg-[var(--dash-bg)] border border-[var(--border-color)] rounded-full px-4 py-2 text-sm text-[var(--text-main)] outline-none focus:border-[var(--accent-color)] transition-colors">
+                            <button class="bg-[var(--text-main)] text-[var(--bg-color)] w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-white transition-colors"><i class="fas fa-paper-plane text-xs"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="dash-card p-6">
+                        <h3 class="text-lg font-bold text-[var(--text-main)] mb-4 border-b border-[var(--border-color)] pb-3">Agreements & NDAs</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-file-contract text-[var(--text-muted)] text-xl"></i>
+                                    <div>
+                                        <p class="text-sm font-bold text-[var(--text-main)]">Mutual NDA</p>
+                                        <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">Signed Sep 01</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-check-circle text-[#10b981]"></i>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-file-signature text-[var(--accent-color)] text-xl"></i>
+                                    <div>
+                                        <p class="text-sm font-bold text-[var(--text-main)]">Coaching Scope</p>
+                                        <p class="text-[10px] text-[var(--accent-color)] uppercase tracking-wider font-bold">Signature Required</p>
+                                    </div>
+                                </div>
+                                <button class="btn-sm btn-outline-table" style="min-width: auto; padding: 4px 12px; height: auto;">Sign</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Sidebar Toggle Logic
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const toggleBtn = document.getElementById('sidebar-toggle');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        }
+
+        if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+        if(sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeBtn.querySelector('i');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        
+        function applyTheme(isDark) {
+            if(isDark) {
+                document.body.classList.add('dark-mode');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                document.body.classList.remove('dark-mode');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        applyTheme(savedTheme === 'dark');
+
+        themeBtn.addEventListener('click', () => {
+            const isDark = !document.body.classList.contains('dark-mode');
+            applyTheme(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // RTL Toggle
+        const rtlBtn = document.getElementById('rtl-toggle');
+        const savedDir = localStorage.getItem('dir') || 'ltr';
+        
+        if (savedDir === 'rtl') { document.documentElement.dir = 'rtl'; }
+
+        rtlBtn.addEventListener('click', () => {
+            const isRTL = document.documentElement.dir === 'rtl';
+            document.documentElement.dir = isRTL ? 'ltr' : 'rtl';
+            localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl');
+        });
+    </script>
+</body>
+</html>

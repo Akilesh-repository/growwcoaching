@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home 2 - GrowwCoaching</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/jpeg" href="images/growwpark_logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === RESET & CORE === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* === THEME VARIABLES (Forest: Black, White, Emerald, Lime) === */
+        :root {
+            --bg-color: #FFFFFF;
+            --bg-secondary: #f4f5f4; 
+            --bg-card: #FFFFFF; 
+            --text-main: #000000;
+            --text-muted: #555555;
+            --accent-color: #10B981; 
+            --accent-dark: #059669; 
+            --border-color: #e5e7eb;
+            --nav-bg: rgba(255, 255, 255, 0.90);
+            --drawer-bg: #FFFFFF;
+            --drawer-text: #000000;
+            --menu-hover-bg: rgba(16, 185, 129, 0.1); 
+        }
+
+        /* DARK MODE */
+        body.dark-mode {
+            --bg-color: #000000; 
+            --bg-secondary: #0a0a0a; 
+            --bg-card: #0a0a0a; 
+            --text-main: #FFFFFF; 
+            --text-muted: #a3a3a3;
+            --accent-color: #A3E635; 
+            --accent-dark: #10B981; 
+            --border-color: #262626;
+            --nav-bg: rgba(0, 0, 0, 0.90);
+            --drawer-bg: #000000;
+            --drawer-text: #FFFFFF;
+            --menu-hover-bg: rgba(163, 230, 53, 0.15); 
+        }
+
+        /* RTL SUPPORT */
+        [dir="rtl"] { text-align: right; }
+        [dir="rtl"] .ml-auto { margin-right: auto; margin-left: 0; }
+        [dir="rtl"] .mr-auto { margin-left: auto; margin-right: 0; }
+        [dir="rtl"] .pl-4 { padding-right: 1rem; padding-left: 0; }
+        [dir="rtl"] .fa-arrow-right { transform: rotate(180deg); }
+
+        /* === NAVBAR === */
+        .navbar { 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); 
+            padding: 12px 0; transition: all 0.3s ease;
+        }
+        
+        /* Main Nav Links */
+        .nav-link { 
+            padding: 6px 10px; 
+            color: var(--text-main); 
+            text-decoration: none; 
+            font-size: 12px; 
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: inline-flex; align-items: center; gap: 4px; cursor: pointer; 
+            border-radius: 9999px; 
+        }
+        @media (min-width: 1440px) {
+            .nav-link { padding: 8px 14px; font-size: 13px; gap: 6px; }
+        }
+        
+        .nav-link:hover, .nav-link.active { 
+            color: var(--accent-color); 
+            background-color: var(--menu-hover-bg);
+        }
+        
+        /* Fixed Dropdown Layout */
+        .dropdown { position: relative; display: flex; align-items: center; height: 100%; }
+        .dropdown-menu { 
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px); 
+            margin-top: 5px; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 100; 
+        }
+        .dropdown-inner { 
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; 
+            min-width: 170px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 8px; 
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        
+        /* Clean Dropdown Items */
+        .dropdown-item { 
+            display: block; padding: 8px 12px; 
+            color: var(--text-main); text-decoration: none; font-size: 13px; font-weight: 600; 
+            border-radius: 6px; transition: all 0.2s; text-align: left; white-space: nowrap;
+        }
+        .dropdown-item:hover { 
+            background: var(--menu-hover-bg); color: var(--accent-color); 
+        }
+
+        /* PILL TOGGLE */
+        .theme-toggle-pill { width: 52px; height: 26px; background: var(--bg-secondary); border-radius: 30px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0 6px; border: 1px solid var(--border-color); }
+        .theme-toggle-pill i { font-size: 10px; z-index: 1; }
+        .theme-toggle-pill .fa-sun { color: #f59e0b; }
+        .theme-toggle-pill .fa-moon { color: #999; }
+        .theme-toggle-pill .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 2; }
+        body.dark-mode .theme-toggle-pill .thumb { transform: translateX(26px); background: #333; }
+
+        /* BUTTONS */
+        .btn { padding: 10px 24px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 9999px; text-align: center; }
+        .btn-solid { background: var(--accent-color); color: var(--bg-color); border: 2px solid var(--accent-color); }
+        .btn-solid:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: var(--bg-color); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+        .btn-outline { border: 2px solid var(--text-main); color: var(--text-main); background: transparent; }
+        .btn-outline:hover { background: var(--text-main); color: var(--bg-color); transform: translateY(-2px); }
+
+        /* FULLSCREEN OVERLAY MENU */
+        .fullscreen-menu { 
+            position: fixed; inset: 0; background: var(--drawer-bg); z-index: 1001; 
+            display: flex; flex-direction: column; color: var(--drawer-text); 
+            opacity: 0; visibility: hidden; transform: scale(0.98); 
+            transition: all 0.3s ease; overflow-y: auto; 
+        }
+        .fullscreen-menu.active { opacity: 1; visibility: visible; transform: scale(1); }
+        
+        .mobile-link { 
+            font-size: 1.125rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; 
+            color: var(--text-main); text-decoration: none; transition: all 0.3s; 
+        }
+        .mobile-link:hover { color: var(--accent-color); }
+
+        /* FOOTER */
+        footer { background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding-top: 60px; margin-top: auto; }
+        footer h4 { color: var(--text-main); font-weight: 800; font-size: 1.1rem; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;} 
+        footer a, footer li, footer span { color: var(--text-muted); text-decoration: none; transition: all 0.3s; font-size: 0.95rem; }
+        footer a:hover { color: var(--accent-color); }
+        .social-link-circle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; transition: all 0.3s; color: var(--text-main); background: var(--bg-card); }
+        .social-link-circle:hover { background: var(--accent-color); color: var(--bg-color); border-color: var(--accent-color); transform: translateY(-3px); }
+        .footer-bottom { border-top: 1px solid var(--border-color); padding: 24px 0; margin-top: 60px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 w-full flex items-center justify-between gap-2 lg:gap-4">
+            
+            <div class="flex items-center shrink-0">
+                <a href="index.html" class="text-xl lg:text-2xl font-black tracking-tighter" style="color: var(--text-main); text-decoration: none;">
+                    GrowwCoaching
+                </a>
+            </div>
+            
+            <div class="hidden xl:flex flex-1 justify-center items-center gap-0.5">
+                <div class="dropdown">
+                    <div class="nav-link active">Home <i class="fas fa-chevron-down text-[8px]"></i></div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <a href="index.html" class="dropdown-item">Home Page 1</a>
+                            <a href="home-2.html" class="dropdown-item" style="color: var(--accent-color); background: var(--menu-hover-bg);">Home Page 2</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="faq.html" class="nav-link">FAQ</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <div class="dropdown">
+                    <div class="nav-link">Dashboard <i class="fas fa-chevron-down text-[8px]"></i></div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-inner">
+                            <a href="user.html" class="dropdown-item">User Dashboard</a>
+                            <a href="admin.html" class="dropdown-item">Admin Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden xl:flex items-center justify-end shrink-0 gap-3">
+                <a href="login.html" class="text-[11px] font-bold uppercase tracking-wide text-[var(--text-muted)] hover:text-[var(--accent-color)] transition-colors px-1">Login</a>
+                <a href="register.html" class="btn btn-solid !py-2 !px-4 !text-[11px]">Register</a>
+                
+                <div class="w-px h-4 bg-[var(--border-color)] mx-1"></div>
+                
+                <button id="rtl-btn" class="text-[9px] font-black text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-secondary)] transition-all uppercase tracking-widest border border-[var(--border-color)] px-2 py-1.5 rounded-full">RTL</button>
+                
+                <div id="theme-toggle-desktop" class="theme-toggle-pill" title="Toggle Dark Mode">
+                    <i class="fas fa-sun"></i><i class="fas fa-moon"></i><div class="thumb"></div>
+                </div>
+            </div>
+
+            <div class="xl:hidden flex items-center justify-end w-auto">
+                <button id="mobile-btn" class="w-9 h-9 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--text-main)] hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] transition-all">
+                    <i class="fas fa-bars text-sm"></i>
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="fullscreen-menu" id="fullscreen-menu">
+        <div class="w-full px-6 py-4 flex justify-between items-center border-b border-[var(--border-color)] shrink-0">
+            <span class="text-xl font-black tracking-tighter">GrowwCoaching</span>
+            <button id="close-menu" class="w-9 h-9 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-[var(--bg-color)] transition-all">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+        </div>
+
+        <div class="flex flex-col items-center justify-start space-y-4 py-8 w-full max-w-md mx-auto text-center px-6 my-auto shrink-0">
+            <a href="index.html" class="mobile-link">Home Page 1</a>
+            <a href="home-2.html" class="mobile-link" style="color: var(--accent-color);">Home Page 2</a>
+            <a href="about.html" class="mobile-link">About</a>
+            <a href="services.html" class="mobile-link">Services</a>
+            <a href="pricing.html" class="mobile-link">Pricing</a>
+            <a href="blog.html" class="mobile-link">Blog</a>
+            <a href="faq.html" class="mobile-link">FAQ</a>
+            <a href="contact.html" class="mobile-link">Contact</a>
+            
+            <div class="w-12 h-px bg-[var(--border-color)] my-1"></div>
+            
+            <a href="user.html" class="mobile-link !text-sm text-[var(--text-muted)]">User Dashboard</a>
+            <a href="admin.html" class="mobile-link !text-sm text-[var(--text-muted)]">Admin Dashboard</a>
+        </div>
+
+        <div class="w-full px-6 py-5 border-t border-[var(--border-color)] flex flex-col gap-4 shrink-0">
+            <div class="flex justify-between items-center max-w-md mx-auto w-full">
+                <div class="flex items-center gap-3">
+                    <span class="text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">Theme:</span>
+                    <div id="theme-toggle-mobile" class="theme-toggle-pill"><i class="fas fa-sun"></i><i class="fas fa-moon"></i><div class="thumb"></div></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[var(--text-muted)] font-bold text-[10px] uppercase tracking-widest">Layout:</span>
+                    <button id="rtl-toggle-mobile" class="text-[10px] font-black text-[var(--text-main)] bg-[var(--bg-secondary)] border border-[var(--border-color)] px-3 py-1.5 rounded-full hover:border-[var(--accent-color)]">LTR / RTL</button>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto">
+                <a href="login.html" class="btn btn-outline w-full !rounded-xl !py-3">Client Login</a>
+                <a href="register.html" class="btn btn-solid w-full !rounded-xl !py-3">Register Now</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="relative w-full min-h-[100vh] lg:min-h-[850px] flex items-center pt-[80px] overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Executive Coaching Session" class="w-full h-full object-cover object-top" />
+            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-color)] opacity-100"></div>
+        </div>
+
+        <div class="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-16 pb-16 mt-10">
+            <div class="max-w-3xl text-center md:text-left mx-auto md:mx-0">
+                <div class="flex items-center justify-center md:justify-start gap-4 mb-6 md:mb-8">
+                    <div class="w-12 h-[2px] bg-[var(--accent-color)] hidden md:block"></div>
+                    <span class="text-xs md:text-sm font-black tracking-[0.2em] uppercase text-white drop-shadow-md">The Premier Coaching Bureau</span>
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-black leading-[1.05] mb-6 md:mb-8 text-white tracking-tighter drop-shadow-lg">
+                    Redefine Your <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-color)] to-emerald-200">Limits.</span>
+                </h1>
+                
+                <p class="text-gray-300 text-sm sm:text-base md:text-xl leading-relaxed mb-10 md:mb-12 max-w-2xl mx-auto md:mx-0 font-medium drop-shadow-md">
+                    Access world-class executive coaching and high-impact keynotes designed to forge unstoppable leaders and scale high-performing teams.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 mb-10 md:mb-14">
+                    <a href="contact.html" class="btn bg-[var(--accent-color)] text-black border-2 border-[var(--accent-color)] hover:bg-transparent hover:text-white hover:border-white text-sm px-8 py-4 w-full sm:w-auto !rounded-none transition-all duration-300 flex items-center justify-center">
+                        Book a Strategy Call <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="services.html" class="btn bg-transparent text-white border-2 border-white/30 hover:bg-white hover:text-black hover:border-white text-sm px-8 py-4 w-full sm:w-auto !rounded-none transition-all duration-300 flex items-center justify-center">
+                        Explore Programs
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 pt-8 border-t border-white/20 justify-items-center md:justify-items-start">
+                    <div class="text-center md:text-left">
+                        <p class="text-3xl md:text-4xl font-black text-white mb-1 md:mb-2">150<span class="text-[var(--accent-color)]">+</span></p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Global Clients</p>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <p class="text-3xl md:text-4xl font-black text-white mb-1 md:mb-2">20<span class="text-[var(--accent-color)]">Yrs</span></p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Experience</p>
+                    </div>
+                    <div class="col-span-2 md:col-span-1 text-center md:text-left">
+                        <p class="text-3xl md:text-4xl font-black text-white mb-1 md:mb-2">99<span class="text-[var(--accent-color)]">%</span></p>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Success Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="py-16 md:py-20 lg:py-32 bg-[var(--bg-color)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16 flex flex-col items-center">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] mb-4 md:mb-6 rounded-full">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-[var(--accent-color)]">Meet the Coach</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black leading-tight text-[var(--text-main)] tracking-tight">
+                    Transforming potential into <span class="text-[var(--accent-color)]">peak performance.</span>
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="relative w-full max-w-md mx-auto lg:max-w-none">
+                    <div class="absolute -top-4 -left-4 sm:-top-6 sm:-left-6 w-24 h-24 sm:w-32 sm:h-32 bg-[var(--menu-hover-bg)] rounded-full -z-10"></div>
+                    <div class="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 w-36 h-36 sm:w-48 sm:h-48 bg-[var(--accent-color)] rounded-3xl opacity-10 -z-10"></div>
+                    
+                    <img src="https://images.pexels.com/photos/5212340/pexels-photo-5212340.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Coach portrait" class="w-full h-auto object-cover rounded-3xl border-2 border-[var(--border-color)] shadow-2xl z-10 relative">
+                    
+                    <div class="absolute bottom-4 -left-4 sm:bottom-10 sm:-left-6 bg-[var(--bg-card)] border border-[var(--border-color)] shadow-xl p-3 sm:p-5 rounded-2xl flex items-center gap-3 sm:gap-4 z-20">
+                        <div class="w-10 h-10 sm:w-14 sm:h-14 bg-[var(--accent-color)] rounded-xl flex items-center justify-center text-white text-lg sm:text-2xl font-black">
+                            20
+                        </div>
+                        <div>
+                            <p class="text-xs sm:text-sm font-bold text-[var(--text-main)]">Years of</p>
+                            <p class="text-[10px] sm:text-xs text-[var(--text-muted)] uppercase tracking-wider">Experience</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col justify-center">
+                    <p class="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed mb-4 md:mb-6">
+                        For over two decades, I have partnered with Fortune 500 executives, startup founders, and global teams to break through limiting beliefs and build scalable leadership frameworks.
+                    </p>
+                    <p class="text-[var(--text-muted)] text-sm sm:text-base leading-relaxed mb-6 md:mb-8">
+                        My philosophy is simple: True leadership is not about managing people; it is about managing energy, vision, and execution. Whether on stage or in a 1-on-1 session, my goal is to equip you with the mental tools needed to dominate your industry.
+                    </p>
+                    
+                    <ul class="space-y-3 sm:space-y-4 mb-8 md:mb-10">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-[var(--accent-color)] mt-1 shrink-0"></i>
+                            <span class="text-sm font-semibold text-[var(--text-main)]">Neuro-Linguistic Programming (NLP) Certified</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-[var(--accent-color)] mt-1 shrink-0"></i>
+                            <span class="text-sm font-semibold text-[var(--text-main)]">Author of 3 Best-Selling Leadership Books</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-[var(--accent-color)] mt-1 shrink-0"></i>
+                            <span class="text-sm font-semibold text-[var(--text-main)]">Award-Winning TEDx Speaker</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+                        <a href="about.html" class="btn btn-solid w-full sm:w-auto">Read Full Bio</a>
+                        <div class="font-[cursive] text-xl sm:text-2xl text-[var(--text-main)] opacity-60 w-full sm:w-auto text-center sm:text-left mt-2 sm:mt-0">
+                            J. Groww
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 lg:py-32 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(var(--text-main) 1px, transparent 1px), linear-gradient(90deg, var(--text-main) 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16 flex flex-col items-center">
+                <span class="inline-block py-1 px-3 rounded-full bg-[var(--menu-hover-bg)] text-[var(--accent-color)] text-[10px] font-bold uppercase tracking-widest mb-4">The Operating System</span>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-[var(--text-main)] mb-4 md:mb-6 tracking-tighter">Engineered for Scale.</h2>
+                <p class="text-[var(--text-muted)] text-sm md:text-lg leading-relaxed">
+                    Hope is not a strategy. We use a relentless, data-driven framework to diagnose your bottlenecks and engineer your path to market dominance.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:auto-rows-[220px]">
+                
+                <div class="md:col-span-2 lg:row-span-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[2rem] p-6 md:p-10 flex flex-col relative overflow-hidden group hover:border-[var(--accent-color)] transition-colors duration-500 shadow-sm hover:shadow-xl">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-[var(--menu-hover-bg)] rounded-full blur-[80px] group-hover:bg-[var(--accent-color)] transition-colors duration-700 opacity-50 pointer-events-none"></div>
+                    
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl flex items-center justify-center text-[var(--accent-color)] text-xl md:text-2xl mb-auto z-10 shrink-0">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    
+                    <div class="z-10 mt-6 md:mt-8">
+                        <h3 class="text-xl md:text-3xl font-black text-[var(--text-main)] mb-3 tracking-tight">Cognitive Restructuring</h3>
+                        <p class="text-[var(--text-muted)] text-sm md:text-base leading-relaxed max-w-md">We dismantle limiting beliefs and operational bottlenecks at the subconscious level. You cannot scale a $10M company with a $1M mindset.</p>
+                        
+                        <div class="mt-6 md:mt-8 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] sm:text-xs font-bold text-[var(--text-main)]">Mindset Shift Progress</span>
+                                <span class="text-[10px] sm:text-xs font-black text-[var(--accent-color)]">85%</span>
+                            </div>
+                            <div class="w-full bg-[var(--border-color)] rounded-full h-2 overflow-hidden">
+                                <div class="bg-[var(--accent-color)] h-full rounded-full" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-2 lg:row-span-1 bg-[var(--text-main)] border border-[var(--text-main)] rounded-[2rem] p-6 md:p-8 flex flex-col justify-center relative overflow-hidden group hover:shadow-2xl transition-all duration-500 min-h-[220px]">
+                    <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(var(--bg-color) 1px, transparent 1px); background-size: 10px 10px;"></div>
+                    <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                        <div>
+                            <h3 class="text-xl md:text-2xl font-black text-[var(--bg-color)] mb-2 md:mb-3 tracking-tight">Surgical Audits</h3>
+                            <p class="text-gray-400 text-xs sm:text-sm leading-relaxed max-w-xs">Data-backed analysis of your calendar, team output, and energy ROI to find exactly where you are bleeding capital.</p>
+                        </div>
+                        <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[var(--accent-color)] text-black flex items-center justify-center text-xl md:text-2xl shrink-0 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
+                            <i class="fas fa-search-dollar"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 lg:row-span-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[2rem] p-6 md:p-8 flex flex-col justify-between hover:border-[var(--accent-color)] transition-colors duration-500 shadow-sm group min-h-[220px]">
+                    <div class="w-10 h-10 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-full flex items-center justify-center text-[var(--text-main)] mb-4 md:mb-0 group-hover:bg-[var(--accent-color)] group-hover:text-black group-hover:border-[var(--accent-color)] transition-colors duration-300 shrink-0">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="mt-4 md:mt-0">
+                        <h3 class="text-lg font-black text-[var(--text-main)] mb-1 md:mb-2">Direct Access</h3>
+                        <p class="text-[var(--text-muted)] text-xs leading-relaxed">24/7 Slack & Voxer. Because boardroom crises don't wait for your next scheduled call.</p>
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 lg:row-span-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[2rem] p-6 md:p-8 flex flex-col justify-between hover:border-[var(--accent-color)] transition-colors duration-500 shadow-sm overflow-hidden relative min-h-[220px]">
+                    <div class="absolute -right-4 -bottom-4 opacity-5 pointer-events-none">
+                        <i class="fas fa-bullseye text-[100px]"></i>
+                    </div>
+                    <div class="relative z-10 flex flex-col h-full justify-end">
+                        <span class="inline-block py-1 px-3 rounded text-[10px] font-black w-max uppercase tracking-widest bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 mb-4">No Excuses</span>
+                        <div>
+                            <h3 class="text-lg font-black text-[var(--text-main)] mb-1 md:mb-2">Execution</h3>
+                            <p class="text-[var(--text-muted)] text-xs leading-relaxed">Bi-weekly accountability sprints that guarantee compounding returns on your effort.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-[#09090b]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16 border-b border-gray-800 pb-8 md:pb-10 flex flex-col items-center">
+                <span class="text-[var(--accent-color)] text-[10px] font-bold uppercase tracking-widest mb-3 block">Our Ideal Partners</span>
+                <h2 class="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tighter leading-tight mb-4 md:mb-6">
+                    We don't work with everyone.<br>We work with the elite.
+                </h2>
+                <p class="text-gray-400 max-w-xl text-xs sm:text-sm leading-relaxed mx-auto">
+                    Our coaching is intense, demanding, and highly selective. If you are not ready to be pushed beyond your comfort zone, this is not for you.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-[#121212] border border-gray-800 p-6 md:p-8 rounded-3xl hover:border-[var(--accent-color)] transition-colors">
+                    <i class="fas fa-rocket text-2xl md:text-3xl text-[var(--accent-color)] mb-4 md:mb-6"></i>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">The Scaler</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">Series A-C Founders transitioning from "doing everything" to architecting a highly scalable, autonomous management team.</p>
+                </div>
+                <div class="bg-[#121212] border border-gray-800 p-6 md:p-8 rounded-3xl hover:border-[var(--accent-color)] transition-colors">
+                    <i class="fas fa-chess-king text-2xl md:text-3xl text-[var(--accent-color)] mb-4 md:mb-6"></i>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">The Executive</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">C-Suite leaders navigating high-stakes boardroom politics, enterprise-level pivots, and massive organizational change.</p>
+                </div>
+                <div class="bg-[#121212] border border-gray-800 p-6 md:p-8 rounded-3xl hover:border-[var(--accent-color)] transition-colors">
+                    <i class="fas fa-cogs text-2xl md:text-3xl text-[var(--accent-color)] mb-4 md:mb-6"></i>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">The Operator</h3>
+                    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">VPs and Directors needing to increase departmental output without burning out their teams or sacrificing their own health.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-[var(--bg-color)] border-b border-[var(--border-color)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-12 md:mb-16 flex flex-col items-center">
+                <h2 class="text-3xl md:text-5xl font-black text-[var(--text-main)] mb-4 md:mb-6 tracking-tighter">The Compound Effect</h2>
+                <p class="text-[var(--text-muted)] text-sm md:text-lg max-w-2xl mx-auto">
+                    We don't just talk about leadership. We measure it. Here is the average impact our clients see within the first 6 months of their coaching sprint.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+                <div class="text-center p-6 md:p-8 bg-[var(--bg-secondary)] rounded-2xl md:rounded-3xl border border-[var(--border-color)]">
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black text-[var(--text-main)] mb-1 md:mb-2">3.4<span class="text-[var(--accent-color)]">x</span></h3>
+                    <p class="text-[10px] sm:text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide">Average ROI</p>
+                </div>
+                <div class="text-center p-6 md:p-8 bg-[var(--bg-secondary)] rounded-2xl md:rounded-3xl border border-[var(--border-color)]">
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black text-[var(--text-main)] mb-1 md:mb-2">40<span class="text-[var(--accent-color)]">h</span></h3>
+                    <p class="text-[10px] sm:text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide">Saved Per Month</p>
+                </div>
+                <div class="text-center p-6 md:p-8 bg-[var(--bg-secondary)] rounded-2xl md:rounded-3xl border border-[var(--border-color)]">
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black text-[var(--text-main)] mb-1 md:mb-2">92<span class="text-[var(--accent-color)]">%</span></h3>
+                    <p class="text-[10px] sm:text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide">Goal Achievement</p>
+                </div>
+                <div class="text-center p-6 md:p-8 bg-[var(--bg-secondary)] rounded-2xl md:rounded-3xl border border-[var(--border-color)]">
+                    <h3 class="text-3xl sm:text-4xl md:text-5xl font-black text-[var(--text-main)] mb-1 md:mb-2">0<span class="text-[var(--accent-color)]">%</span></h3>
+                    <p class="text-[10px] sm:text-sm font-bold text-[var(--text-muted)] uppercase tracking-wide">Executive Burnout</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] relative overflow-hidden">
+        <div class="absolute -right-40 -bottom-40 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-[var(--menu-hover-bg)] rounded-full blur-[60px] md:blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+            
+            <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16 flex flex-col items-center">
+                <span class="text-[var(--accent-color)] text-[10px] font-bold uppercase tracking-widest mb-3 md:mb-4 block">Proprietary Tools</span>
+                <h2 class="text-3xl md:text-5xl font-black text-[var(--text-main)] mb-4 md:mb-6 tracking-tighter leading-tight">
+                    The Executive Arsenal.
+                </h2>
+                <p class="text-[var(--text-muted)] text-sm md:text-lg leading-relaxed">
+                    Stop guessing. When you partner with us, you get immediate access to our gated Client Dashboard, loaded with the exact plug-and-play frameworks scaling billion-dollar companies.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div>
+                    <ul class="space-y-6">
+                        <li class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] shadow-sm flex items-center justify-center text-[var(--accent-color)] shrink-0">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-[var(--text-main)] mb-1">Miro Team Architecture Maps</h4>
+                                <p class="text-xs sm:text-sm text-[var(--text-muted)]">Visual drag-and-drop boards to restructure your org chart flawlessly.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] shadow-sm flex items-center justify-center text-[var(--accent-color)] shrink-0">
+                                <i class="fas fa-file-excel"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-[var(--text-main)] mb-1">The Energy ROI Calculator</h4>
+                                <p class="text-xs sm:text-sm text-[var(--text-muted)]">A ruthless spreadsheet to determine exactly what tasks you must delegate today.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] shadow-sm flex items-center justify-center text-[var(--accent-color)] shrink-0">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-[var(--text-main)] mb-1">On-Demand Masterclass Vault</h4>
+                                <p class="text-xs sm:text-sm text-[var(--text-muted)]">Over 50+ hours of exclusive training modules on negotiation and high-ticket sales.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-[2rem] shadow-2xl p-4 sm:p-6 relative max-w-lg mx-auto w-full">
+                    <div class="flex items-center gap-2 mb-4 sm:mb-6 border-b border-[var(--border-color)] pb-3 sm:pb-4">
+                        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400"></div>
+                        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400"></div>
+                        <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400"></div>
+                        <span class="ml-2 sm:ml-4 text-[10px] sm:text-xs font-bold text-[var(--text-muted)]">Client Workspace</span>
+                    </div>
+                    
+                    <div class="space-y-3 sm:space-y-4">
+                        <div class="h-10 sm:h-12 bg-[var(--bg-secondary)] rounded-xl flex items-center px-3 sm:px-4 gap-3 sm:gap-4 animate-pulse">
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 bg-[var(--border-color)] rounded-md"></div>
+                            <div class="h-2.5 sm:h-3 w-1/3 bg-[var(--border-color)] rounded"></div>
+                            <div class="ml-auto h-4 sm:h-5 w-12 sm:w-16 bg-[var(--accent-color)]/20 rounded-full"></div>
+                        </div>
+                        <div class="h-10 sm:h-12 bg-[var(--bg-secondary)] rounded-xl flex items-center px-3 sm:px-4 gap-3 sm:gap-4 animate-pulse" style="animation-delay: 200ms;">
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 bg-[var(--border-color)] rounded-md"></div>
+                            <div class="h-2.5 sm:h-3 w-1/2 bg-[var(--border-color)] rounded"></div>
+                            <div class="ml-auto h-4 sm:h-5 w-12 sm:w-16 bg-[var(--accent-color)]/20 rounded-full"></div>
+                        </div>
+                        <div class="h-10 sm:h-12 bg-[var(--bg-secondary)] rounded-xl flex items-center px-3 sm:px-4 gap-3 sm:gap-4 animate-pulse" style="animation-delay: 400ms;">
+                            <div class="w-5 h-5 sm:w-6 sm:h-6 bg-[var(--border-color)] rounded-md"></div>
+                            <div class="h-2.5 sm:h-3 w-1/4 bg-[var(--border-color)] rounded"></div>
+                            <div class="ml-auto h-4 sm:h-5 w-12 sm:w-16 bg-[var(--accent-color)]/20 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <div class="absolute -right-2 -bottom-2 sm:-right-6 sm:-bottom-6 bg-[var(--accent-color)] text-black p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl transform rotate-3">
+                        <p class="text-[8px] sm:text-xs font-black uppercase tracking-widest mb-0.5 sm:mb-1">Access Granted</p>
+                        <p class="text-xs sm:text-base font-bold">Lifetime Vault Entry</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-20 bg-[var(--bg-color)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center max-w-3xl mx-auto mb-10 md:mb-12 flex flex-col items-center">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black leading-tight text-[var(--text-main)] tracking-tight mb-3 md:mb-4">
+                    Stories of Transformation
+                </h2>
+                <a href="testimonials.html" class="text-xs sm:text-sm font-bold text-[var(--accent-color)] hover:text-[var(--accent-dark)] uppercase tracking-wider">Read All Reviews <i class="fas fa-arrow-right ml-1"></i></a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-[var(--bg-secondary)] p-6 md:p-8 rounded-3xl border border-[var(--border-color)]">
+                    <div class="flex text-[var(--accent-color)] text-[10px] sm:text-xs mb-4 gap-1">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-[var(--text-main)] font-medium text-xs sm:text-sm leading-relaxed mb-6 italic">"The keynote completely changed the trajectory of our annual summit. The insights were actionable, brutal, and exactly what our sales team needed to hear."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[var(--border-color)]">
+                            <img src="https://images.pexels.com/photos/6740171/pexels-photo-6740171.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Sarah Jenkins" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="text-[11px] sm:text-xs font-bold text-[var(--text-main)]">Sarah Jenkins</p>
+                            <p class="text-[9px] sm:text-[10px] text-[var(--text-muted)] uppercase tracking-widest">VP of Sales, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-[var(--bg-secondary)] p-6 md:p-8 rounded-3xl border border-[var(--border-color)]">
+                    <div class="flex text-[var(--accent-color)] text-[10px] sm:text-xs mb-4 gap-1">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-[var(--text-main)] font-medium text-xs sm:text-sm leading-relaxed mb-6 italic">"Six months of executive coaching felt like getting a master's degree in mental toughness. My startup raised Series B largely due to the confidence built here."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[var(--border-color)]">
+                            <img src="https://images.pexels.com/photos/935977/pexels-photo-935977.jpeg?auto=compress&cs=tinysrgb&w=200" alt="David O." class="w-full h-full object-cover object-top">
+                        </div>
+                        <div>
+                            <p class="text-[11px] sm:text-xs font-bold text-[var(--text-main)]">David O.</p>
+                            <p class="text-[9px] sm:text-[10px] text-[var(--text-muted)] uppercase tracking-widest">Founder & CEO</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[var(--bg-secondary)] p-6 md:p-8 rounded-3xl border border-[var(--border-color)]">
+                    <div class="flex text-[var(--accent-color)] text-[10px] sm:text-xs mb-4 gap-1">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-[var(--text-main)] font-medium text-xs sm:text-sm leading-relaxed mb-6 italic">"Absolutely electric. We booked the corporate workshop for our management tier, and the communication barriers that vanished in one day were astounding."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-[var(--border-color)]">
+                            <img src="https://images.pexels.com/photos/6203641/pexels-photo-6203641.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Marcus T." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <p class="text-[11px] sm:text-xs font-bold text-[var(--text-main)]">Marcus T.</p>
+                            <p class="text-[9px] sm:text-[10px] text-[var(--text-muted)] uppercase tracking-widest">HR Director</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 md:py-24 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(var(--text-main) 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col items-center">
+            <div class="w-16 h-16 md:w-20 md:h-20 mx-auto bg-[var(--bg-card)] border border-[var(--border-color)] rounded-full flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-8 shadow-sm">
+                <i class="fas fa-hourglass-half text-[var(--accent-color)]"></i>
+            </div>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-black text-[var(--text-main)] mb-4 md:mb-6 tracking-tighter">Strictly Limited Capacity</h2>
+            <p class="text-[var(--text-muted)] text-sm md:text-lg leading-relaxed mb-8 md:mb-10">
+                To ensure uncompromising quality and deep, personalized attention, we only onboard <strong class="text-[var(--text-main)]">4 new executives per quarter.</strong> Applications are reviewed on a rolling basis.
+            </p>
+            <div class="inline-block bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 md:p-6 shadow-xl mb-8 md:mb-10 w-full sm:w-auto">
+                <p class="text-[10px] sm:text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">Q3 Cohort Status</p>
+                <div class="flex items-center justify-center gap-2 sm:gap-3 text-lg sm:text-xl font-black text-[var(--text-main)]">
+                    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#ef4444] animate-pulse"></span>
+                    Only 1 spot remaining
+                </div>
+            </div>
+            <div class="w-full sm:w-auto">
+                <a href="register.html" class="btn btn-solid !px-8 sm:!px-10 !py-4 sm:!py-5 shadow-2xl shadow-emerald-900/20 text-xs sm:text-sm w-full sm:w-auto block sm:inline-block">Submit Your Application</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 mb-10 pt-4">
+                <div class="lg:col-span-4">
+                    <a href="index.html" class="text-xl md:text-2xl font-black tracking-tighter mb-4 md:mb-6 block" style="color: var(--text-main); text-decoration: none;">
+                        GrowwCoaching
+                    </a>
+                    <p class="opacity-80 leading-relaxed text-xs sm:text-sm mb-6 max-w-sm" style="color: var(--text-muted);">Empowering leaders, transforming mindsets, and delivering unforgettable keynote experiences for Fortune 500 companies worldwide.</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="social-link-circle"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link-circle"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link-circle"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h4>Expertise</h4>
+                            <ul class="space-y-3">
+                                <li><a href="services.html">Keynote Speaking</a></li>
+                                <li><a href="services.html">Executive Coaching</a></li>
+                                <li><a href="services.html">Corporate Workshops</a></li>
+                                <li><a href="media-kit.html">Media Kit & Assets</a></li>
+                                <li><a href="about.html">Meet the Speaker</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Client Portal</h4>
+                            <ul class="space-y-3">
+                                <li><a href="dashboard-home.html">Dashboard Access</a></li>
+                                <li><a href="video-vault.html">Video Masterclasses</a></li>
+                                <li><a href="login.html">Client Login</a></li>
+                                <li><a href="register.html">Apply for Coaching</a></li>
+                                <li><a href="schedule.html">Manage Schedule</a></li>
+                            </ul>
+                        </div>
+                        <div class="sm:col-span-2 md:col-span-1">
+                            <h4>Booking & Inquiries</h4>
+                            <ul class="space-y-3 text-[var(--text-muted)] text-sm">
+                                <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-3 shrink-0" style="color: var(--accent-color);"></i><span>Global Reach<br>Based in New York</span></li>
+                                <li class="flex items-center"><i class="fas fa-phone mr-3 shrink-0" style="color: var(--accent-color);"></i><a href="tel:+15551234567" class="break-all">+1 (555) 123-4567</a></li>
+                                <li class="flex items-center"><i class="fas fa-envelope mr-3 shrink-0" style="color: var(--accent-color);"></i><a href="mailto:info@groww.com" class="break-all">info@groww.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom flex flex-col md:flex-row justify-between items-center text-xs sm:text-sm gap-4">
+                <p style="color: var(--text-muted); text-align: center;">&copy; 2026 GrowwCoaching Bureau. All rights reserved.</p>
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fullscreen Menu Logic
+        const mobileBtn = document.getElementById('mobile-btn'); 
+        const fullscreenMenu = document.getElementById('fullscreen-menu'); 
+        const closeMenu = document.getElementById('close-menu'); 
+        
+        function toggleMenu() { 
+            fullscreenMenu.classList.toggle('active'); 
+            document.body.style.overflow = fullscreenMenu.classList.contains('active') ? 'hidden' : 'auto';
+        }
+        
+        mobileBtn.onclick = toggleMenu; 
+        closeMenu.onclick = toggleMenu; 
+        
+        // Theme Logic
+        const themeDesktop = document.getElementById('theme-toggle-desktop');
+        const themeMobile = document.getElementById('theme-toggle-mobile'); 
+        const theme = localStorage.getItem('theme') || 'light';
+
+        function updateThemeUI(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode'); 
+                if(themeMobile) themeMobile.classList.add('active');
+            } else {
+                document.body.classList.remove('dark-mode');
+                if(themeMobile) themeMobile.classList.remove('active');
+            }
+        }
+        
+        updateThemeUI(theme === 'dark');
+        
+        function toggleTheme() { 
+            const isDark = !document.body.classList.contains('dark-mode');
+            updateThemeUI(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light'); 
+        }
+        
+        themeDesktop.onclick = toggleTheme; 
+        if(themeMobile) themeMobile.onclick = toggleTheme;
+        
+        // RTL Logic
+        const rtlBtn = document.getElementById('rtl-btn'); 
+        const rtlMobile = document.getElementById('rtl-toggle-mobile'); 
+        const dir = localStorage.getItem('dir') || 'ltr';
+        
+        if (dir === 'rtl') { 
+            document.documentElement.dir = 'rtl'; 
+        }
+        
+        function toggleRTL() { 
+            const isRTL = document.documentElement.dir === 'rtl'; 
+            document.documentElement.dir = isRTL ? 'ltr' : 'rtl'; 
+            localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl'); 
+        }
+        
+        rtlBtn.onclick = toggleRTL; 
+        if(rtlMobile) rtlMobile.onclick = toggleRTL;
+    </script>
+</body>
+</html>
