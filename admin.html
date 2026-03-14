@@ -195,11 +195,14 @@
 
         /* TOPBAR BUTTONS */
         .icon-btn {
-            width: 44px; height: 44px; border-radius: 12px;
+            width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             color: var(--text-muted); background: var(--card-bg); 
             border: 1px solid var(--border-color);
             cursor: pointer; transition: all 0.2s;
+        }
+        @media (min-width: 640px) {
+            .icon-btn { width: 44px; height: 44px; }
         }
         .icon-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
@@ -208,7 +211,6 @@
             background: linear-gradient(to right, #09090b, #1a1a24);
             color: #ffffff; 
             border-radius: var(--radius);
-            padding: 32px 40px;
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.4);
@@ -228,10 +230,10 @@
             background: var(--accent-color); 
             color: #000; 
             border: 1px solid var(--accent-color); 
-            padding: 0 16px; 
+            padding: 0 12px; 
             height: 44px; /* Fixed Height */
             width: 100%; /* Force fill container */
-            font-size: 0.8rem; 
+            font-size: 0.75rem; 
             font-weight: 800; 
             border-radius: 8px; 
             cursor: pointer; 
@@ -242,22 +244,23 @@
             align-items: center; 
             justify-content: center;
             text-align: center;
-            gap: 8px; 
+            gap: 6px; 
             box-shadow: 0 4px 15px -3px rgba(16, 185, 129, 0.3); 
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        @media (min-width: 640px) { .btn-action { padding: 0 16px; font-size: 0.8rem; gap: 8px; } }
         .btn-action:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; transform: translateY(-2px); }
         
         .btn-outline { 
             background: var(--card-bg); 
             color: var(--text-main); 
             border: 1px solid var(--border-color); 
-            padding: 0 16px; 
+            padding: 0 12px; 
             height: 44px; /* Fixed Height */
             width: 100%; /* Force fill container */
-            font-size: 0.8rem; 
+            font-size: 0.75rem; 
             font-weight: 800; 
             border-radius: 8px; 
             cursor: pointer; 
@@ -268,11 +271,12 @@
             align-items: center; 
             justify-content: center;
             text-align: center;
-            gap: 8px; 
+            gap: 6px; 
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        @media (min-width: 640px) { .btn-outline { padding: 0 16px; font-size: 0.8rem; gap: 8px; } }
         .btn-outline:hover { border-color: var(--text-main); background: var(--dash-bg); transform: translateY(-2px); }
 
         .btn-sm { 
@@ -305,11 +309,12 @@
         .btn-outline-table:hover { border-color: var(--text-main); background: var(--dash-bg); }
 
         /* KANBAN/PIPELINE CARDS */
-        .pipeline-col { background: var(--dash-bg); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border-color); }
+        .pipeline-col { background: var(--dash-bg); border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border-color); min-w: 0; }
+        @media (min-width: 640px) { .pipeline-col { padding: 20px; } }
         .pipeline-card { background: var(--card-bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.02); cursor: pointer; transition: all 0.2s; }
         .pipeline-card:hover { border-color: var(--accent-color); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.1); }
 
-        .health-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .health-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
         .health-good { background-color: #10B981; box-shadow: 0 0 8px #10B981; }
         .health-warn { background-color: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
         .health-risk { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
@@ -321,10 +326,11 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     
     <aside class="sidebar" id="sidebar">
-        <div class="mb-12 px-4">
+        <div class="mb-12 px-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-black tracking-tighter block" style="color: var(--text-main); text-decoration: none;">
                 DoneCoaching
             </a>
+            <button class="lg:hidden text-[var(--text-muted)] hover:text-[var(--text-main)]" onclick="toggleSidebar()"><i class="fas fa-times text-xl"></i></button>
         </div>
         
         <nav class="flex-grow">
@@ -367,8 +373,8 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 md:gap-5">
-                <button class="icon-btn" id="rtl-toggle" title="Toggle RTL"><i class="fas fa-align-right"></i></button>
+            <div class="flex items-center gap-2 md:gap-4">
+                <button class="icon-btn hidden sm:flex" id="rtl-toggle" title="Toggle RTL"><i class="fas fa-align-right"></i></button>
                 <button class="icon-btn" id="theme-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
                 
                 <div class="relative cursor-pointer group">
@@ -380,13 +386,13 @@
 
                 <div class="w-px h-8 mx-1 bg-[var(--border-color)]"></div>
                 
-                <div class="flex items-center gap-3 cursor-pointer bg-[var(--card-bg)] border border-[var(--border-color)] pl-2 pr-4 py-1.5 rounded-full hover:border-[var(--text-main)] transition-colors">
-                    <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Admin" class="w-8 h-8 rounded-full border border-[var(--border-color)] object-cover object-top">
+                <div class="flex items-center gap-2 sm:gap-3 cursor-pointer bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 sm:pl-2 sm:pr-4 sm:py-1.5 rounded-full hover:border-[var(--text-main)] transition-colors">
+                    <img src="images/pexels-mikhail-nilov-6740171.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Sarah+J&background=random'" alt="Admin" class="w-8 h-8 rounded-full border border-[var(--border-color)] object-cover object-top">
                     <div class="hidden md:block text-left">
                         <p class="text-sm font-bold text-[var(--text-main)] leading-tight">Sarah J.</p>
                         <p class="text-[10px] text-[var(--text-muted)] font-bold uppercase tracking-wider">Lead Coach</p>
                     </div>
-                    <i class="fas fa-chevron-down text-xs text-[var(--text-muted)] ml-2"></i>
+                    <i class="fas fa-chevron-down text-xs text-[var(--text-muted)] ml-1 hidden sm:block"></i>
                 </div>
             </div>
         </header>
@@ -394,82 +400,82 @@
         <main class="content-area">
             
             <div id="overview-top">
-                <div class="hero-banner mb-6">
-                    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                <div class="hero-banner p-6 sm:p-8 md:p-10 mb-6">
+                    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6">
                         <div>
-                            <h1 class="text-2xl md:text-3xl font-black mb-2 tracking-tight text-white">Business Overview</h1>
-                            <p class="text-gray-400 text-sm font-medium">You have <strong class="text-white">3 coaching sessions</strong> scheduled today. The business is running smoothly.</p>
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black mb-2 tracking-tight text-white leading-tight">Business Overview</h1>
+                            <p class="text-gray-400 text-sm md:text-base font-medium">You have <strong class="text-white">3 coaching sessions</strong> scheduled today. The business is running smoothly.</p>
                         </div>
-                        <p class="text-xs font-bold uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/20 px-4 py-2 rounded-lg">
+                        <p class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/20 px-3 sm:px-4 py-2 rounded-lg self-start md:self-auto">
                             <i class="fas fa-circle text-[8px] mr-1 blink"></i> System Nominal
                         </p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
                     <button class="btn-action"><i class="fas fa-user-plus"></i> Onboard</button>
                     <button class="btn-outline"><i class="fas fa-file-invoice-dollar"></i>Invoice</button>
                     <button class="btn-outline"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
                     <button class="btn-outline"><i class="fas fa-calendar-check"></i> Book Keynote</button>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
-                    <div class="dash-card p-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-10">
+                    <div class="dash-card p-5 sm:p-6">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Monthly Recurring (MRR)</p>
                             <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--accent-color)]"><i class="fas fa-chart-bar"></i></div>
                         </div>
-                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">$124.5k</h3>
-                        <p class="text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +12% from last month</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] mt-1">$124.5k</h3>
+                        <p class="text-[10px] sm:text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +12% from last month</p>
                     </div>
 
-                    <div class="dash-card p-6">
+                    <div class="dash-card p-5 sm:p-6">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Active Retainers</p>
                             <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-user-tie"></i></div>
                         </div>
-                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18</h3>
-                        <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">2 graduating this month</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] mt-1">18</h3>
+                        <p class="text-[10px] sm:text-xs text-[var(--text-muted)] mt-2 font-bold">2 graduating this month</p>
                     </div>
 
-                    <div class="dash-card p-6">
+                    <div class="dash-card p-5 sm:p-6">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Upcoming Keynotes</p>
                             <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[var(--text-main)]"><i class="fas fa-microphone-alt"></i></div>
                         </div>
-                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">3</h3>
-                        <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Next: Nov 14 (Tech Summit)</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] mt-1">3</h3>
+                        <p class="text-[10px] sm:text-xs text-[var(--text-muted)] mt-2 font-medium">Next: Nov 14 (Tech Summit)</p>
                     </div>
 
-                    <div class="dash-card p-6 border-l-4 border-l-[#f59e0b]">
+                    <div class="dash-card p-5 sm:p-6 border-l-4 border-l-[#f59e0b]">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">Pending Proposals</p>
                             <div class="w-8 h-8 rounded-lg bg-[var(--dash-bg)] flex items-center justify-center text-[#f59e0b]"><i class="fas fa-file-contract"></i></div>
                         </div>
-                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">$45k</h3>
-                        <p class="text-xs text-[#f59e0b] mt-2 font-bold">4 deals awaiting signature</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] mt-1">$45k</h3>
+                        <p class="text-[10px] sm:text-xs text-[#f59e0b] mt-2 font-bold">4 deals awaiting signature</p>
                     </div>
                 </div>
             </div>
 
-            <div id="bottom-grid" class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div id="bottom-grid" class="grid grid-cols-1 xl:grid-cols-3 gap-6 xl:gap-8">
                 
-                <div id="section-roster" class="xl:col-span-2 flex flex-col gap-6">
-                    <div class="flex justify-between items-end">
+                <div id="section-roster" class="xl:col-span-2 flex flex-col gap-4 sm:gap-6 min-w-0">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
                         <div>
-                            <h3 class="text-xl font-black text-[var(--text-main)]">Active Client Roster</h3>
+                            <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Active Client Roster</h3>
                             <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Monitor program phases and account health.</p>
                         </div>
                         <a href="#" class="text-[var(--accent-color)] text-sm font-bold hover:underline">View All</a>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="dash-card p-6 flex flex-col justify-between">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div class="dash-card p-5 sm:p-6 flex flex-col justify-between">
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-3">
-                                    <img src="images/pexels-nappy-935977.jpg" class="w-12 h-12 rounded-full object-cover object-top border border-[var(--border-color)]">
+                                    <img src="images/pexels-nappy-935977.jpg" onerror="this.src='https://ui-avatars.com/api/?name=David+O&background=random'" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover object-top border border-[var(--border-color)]">
                                     <div>
-                                        <h4 class="font-bold text-[var(--text-main)]">David O.</h4>
+                                        <h4 class="font-bold text-[var(--text-main)] text-sm sm:text-base">David O.</h4>
                                         <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">Founder & CEO</p>
                                     </div>
                                 </div>
@@ -487,12 +493,12 @@
                             </div>
                         </div>
 
-                        <div class="dash-card p-6 flex flex-col justify-between">
+                        <div class="dash-card p-5 sm:p-6 flex flex-col justify-between">
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-3">
-                                    <img src="images/pexels-pavel-danilyuk-6203641.jpg" class="w-12 h-12 rounded-full object-cover border border-[var(--border-color)]">
+                                    <img src="images/pexels-pavel-danilyuk-6203641.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Marcus+T&background=random'" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-[var(--border-color)]">
                                     <div>
-                                        <h4 class="font-bold text-[var(--text-main)]">Marcus T.</h4>
+                                        <h4 class="font-bold text-[var(--text-main)] text-sm sm:text-base">Marcus T.</h4>
                                         <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">VP of Sales</p>
                                     </div>
                                 </div>
@@ -510,12 +516,12 @@
                             </div>
                         </div>
 
-                        <div class="dash-card p-6 flex flex-col justify-between">
+                        <div class="dash-card p-5 sm:p-6 flex flex-col justify-between">
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-12 h-12 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-sm font-black text-[var(--text-main)] border border-[var(--border-color)]">ER</div>
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[var(--dash-bg)] flex items-center justify-center text-xs sm:text-sm font-black text-[var(--text-main)] border border-[var(--border-color)]">ER</div>
                                     <div>
-                                        <h4 class="font-bold text-[var(--text-main)]">Elena R.</h4>
+                                        <h4 class="font-bold text-[var(--text-main)] text-sm sm:text-base">Elena R.</h4>
                                         <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">CMO</p>
                                     </div>
                                 </div>
@@ -533,9 +539,9 @@
                             </div>
                         </div>
 
-                        <div class="dash-card p-6 flex flex-col justify-between border-dashed border-2 bg-transparent opacity-60 hover:opacity-100 cursor-pointer items-center justify-center min-h-[180px]">
-                            <div class="w-12 h-12 rounded-full bg-[var(--dash-bg)] text-[var(--text-muted)] flex items-center justify-center mb-3">
-                                <i class="fas fa-plus text-xl"></i>
+                        <div class="dash-card p-5 sm:p-6 flex flex-col justify-between border-dashed border-2 bg-transparent opacity-60 hover:opacity-100 cursor-pointer items-center justify-center min-h-[160px] sm:min-h-[180px]">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[var(--dash-bg)] text-[var(--text-muted)] flex items-center justify-center mb-3">
+                                <i class="fas fa-plus text-lg sm:text-xl"></i>
                             </div>
                             <h4 class="font-bold text-[var(--text-main)] text-sm">Add New Client</h4>
                             <p class="text-xs text-[var(--text-muted)]">Send onboarding package</p>
@@ -544,10 +550,10 @@
                     </div>
                 </div>
 
-                <div id="section-pipeline" class="flex flex-col gap-6">
-                    <div class="flex justify-between items-end">
+                <div id="section-pipeline" class="flex flex-col gap-4 sm:gap-6 min-w-0">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
                         <div>
-                            <h3 class="text-xl font-black text-[var(--text-main)]">Sales Pipeline</h3>
+                            <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Sales Pipeline</h3>
                             <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Manage incoming inquiries.</p>
                         </div>
                     </div>
@@ -561,7 +567,7 @@
                         <div class="pipeline-card">
                             <div class="flex justify-between items-start mb-2">
                                 <h5 class="font-bold text-[var(--text-main)] text-sm">TechCorp Offsite</h5>
-                                <span class="text-[9px] font-black bg-[var(--dash-bg)] text-[var(--text-muted)] px-2 py-0.5 rounded">Workshop</span>
+                                <span class="text-[9px] font-black bg-[var(--dash-bg)] text-[var(--text-muted)] px-2 py-0.5 rounded ml-2">Workshop</span>
                             </div>
                             <p class="text-xs text-[var(--text-muted)] mb-3">Inquired via website. Needs a full-day sales alignment workshop for 50 execs.</p>
                             <div class="flex justify-between items-center border-t border-[var(--border-color)] pt-3">
@@ -572,8 +578,8 @@
 
                         <div class="pipeline-card">
                             <div class="flex justify-between items-start mb-2">
-                                <h5 class="font-bold text-[var(--text-main)]">Alicia K.</h5>
-                                <span class="text-[9px] font-black bg-[var(--dash-bg)] text-[var(--text-muted)] px-2 py-0.5 rounded">1-on-1</span>
+                                <h5 class="font-bold text-[var(--text-main)] text-sm">Alicia K.</h5>
+                                <span class="text-[9px] font-black bg-[var(--dash-bg)] text-[var(--text-muted)] px-2 py-0.5 rounded ml-2">1-on-1</span>
                             </div>
                             <p class="text-xs text-[var(--text-muted)] mb-3">Startup founder looking for leadership scaling. Call scheduled for tomorrow.</p>
                             <div class="flex justify-between items-center border-t border-[var(--border-color)] pt-3">
@@ -590,24 +596,24 @@
 
             </div>
 
-            <div id="section-schedule" class="flex-col gap-6" style="display: none;">
-                <div class="flex justify-between items-end">
+            <div id="section-schedule" class="flex-col gap-4 sm:gap-6 min-w-0" style="display: none;">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                     <div>
-                        <h3 class="text-xl font-black text-[var(--text-main)]">Master Schedule</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Master Schedule</h3>
                         <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Manage your upcoming coaching sessions and events.</p>
                     </div>
-                    <button class="btn-action !w-auto !px-6"><i class="fas fa-plus"></i> New Event</button>
+                    <button class="btn-action w-full sm:w-auto px-6 rounded-md"><i class="fas fa-plus"></i> New Event</button>
                 </div>
                 
-                <div class="flex gap-2 border-b border-[var(--border-color)] pb-3">
+                <div class="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-2 sm:pb-3">
                     <button class="text-sm font-bold text-[var(--accent-color)] border-b-2 border-[var(--accent-color)] pb-2 px-2">Upcoming</button>
                     <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Past</button>
                     <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Canceled</button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                     
-                    <div class="dash-card p-5 flex flex-col justify-between">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] font-black uppercase tracking-widest text-[#f59e0b] bg-[#f59e0b]/10 px-2 py-1 rounded">In 2 hours</span>
@@ -616,7 +622,7 @@
                             <h4 class="font-bold text-[var(--text-main)] text-lg mb-1">1-on-1 Strategy Session</h4>
                             <p class="text-xs text-[var(--text-muted)] font-medium mb-4"><i class="far fa-clock mr-1"></i> Today, 2:00 PM - 3:00 PM</p>
                             <div class="flex items-center gap-3 mb-6">
-                                <img src="images/pexels-nappy-935977.jpg" class="w-8 h-8 rounded-full object-cover border border-[var(--border-color)]">
+                                <img src="images/pexels-nappy-935977.jpg" onerror="this.src='https://ui-avatars.com/api/?name=David+O&background=random'" class="w-8 h-8 rounded-full object-cover border border-[var(--border-color)]">
                                 <div>
                                     <p class="text-sm font-bold text-[var(--text-main)]">David O.</p>
                                     <p class="text-[10px] text-[var(--text-muted)] uppercase tracking-widest font-bold">Founder & CEO</p>
@@ -629,7 +635,7 @@
                         </div>
                     </div>
 
-                    <div class="dash-card p-5 flex flex-col justify-between">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] font-black uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded">Tomorrow</span>
@@ -651,7 +657,7 @@
                         </div>
                     </div>
 
-                    <div class="dash-card p-5 flex flex-col justify-between">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start mb-3">
                                 <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--dash-bg)] px-2 py-1 rounded">Nov 14</span>
@@ -676,82 +682,82 @@
                 </div>
             </div>
 
-            <div id="section-finance" class="flex-col gap-6" style="display: none;">
-                <div class="flex justify-between items-end">
+            <div id="section-finance" class="flex-col gap-4 sm:gap-6 min-w-0" style="display: none;">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                     <div>
-                        <h3 class="text-xl font-black text-[var(--text-main)]">Finance & Billing</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Finance & Billing</h3>
                         <p class="text-xs font-medium text-[var(--text-muted)] mt-1">Track revenue, client invoices, and expenses.</p>
                     </div>
-                    <button class="btn-action !w-auto !px-6"><i class="fas fa-file-invoice"></i> Create Invoice</button>
+                    <button class="btn-action w-full sm:w-auto px-6 rounded-md"><i class="fas fa-file-invoice"></i> Create Invoice</button>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="dash-card p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                    <div class="dash-card p-5 sm:p-6">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">YTD Revenue</p>
-                        <h3 class="text-2xl font-black text-[var(--text-main)]">$450,200</h3>
-                        <p class="text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +24% vs Last Year</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)]">$450,200</h3>
+                        <p class="text-[10px] sm:text-xs text-[var(--accent-color)] mt-2 font-bold"><i class="fas fa-arrow-up"></i> +24% vs Last Year</p>
                     </div>
-                    <div class="dash-card p-6 border-l-4 border-l-[#f59e0b]">
+                    <div class="dash-card p-5 sm:p-6 border-l-4 border-l-[#f59e0b]">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Outstanding</p>
-                        <h3 class="text-2xl font-black text-[var(--text-main)]">$45,000</h3>
-                        <p class="text-xs text-[#f59e0b] mt-2 font-bold">2 Invoices Pending</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)]">$45,000</h3>
+                        <p class="text-[10px] sm:text-xs text-[#f59e0b] mt-2 font-bold">2 Invoices Pending</p>
                     </div>
-                    <div class="dash-card p-6">
+                    <div class="dash-card p-5 sm:p-6">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Est. Next Payout</p>
-                        <h3 class="text-2xl font-black text-[var(--text-main)]">$12,500</h3>
-                        <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">Processing on Nov 15</p>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)]">$12,500</h3>
+                        <p class="text-[10px] sm:text-xs text-[var(--text-muted)] mt-2 font-bold">Processing on Nov 15</p>
                     </div>
                 </div>
 
-                <div class="dash-card overflow-hidden">
-                    <div class="p-5 border-b border-[var(--border-color)] flex justify-between items-center">
-                        <h4 class="font-bold text-[var(--text-main)]">Recent Invoices</h4>
+                <div class="dash-card overflow-hidden min-w-0 w-full">
+                    <div class="p-4 sm:p-5 border-b border-[var(--border-color)] flex justify-between items-center">
+                        <h4 class="font-bold text-[var(--text-main)] text-sm sm:text-base">Recent Invoices</h4>
                         <button class="text-xs font-bold text-[var(--accent-color)] hover:underline">View All</button>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left border-collapse min-w-[700px]">
                             <thead>
                                 <tr class="bg-[var(--dash-bg)] text-[10px] uppercase tracking-widest text-[var(--text-muted)]">
-                                    <th class="p-4 font-black">Invoice</th>
-                                    <th class="p-4 font-black">Client</th>
-                                    <th class="p-4 font-black">Amount</th>
-                                    <th class="p-4 font-black">Date Issued</th>
-                                    <th class="p-4 font-black">Status</th>
-                                    <th class="p-4 font-black text-right">Action</th>
+                                    <th class="p-3 sm:p-4 font-black">Invoice</th>
+                                    <th class="p-3 sm:p-4 font-black">Client</th>
+                                    <th class="p-3 sm:p-4 font-black">Amount</th>
+                                    <th class="p-3 sm:p-4 font-black">Date Issued</th>
+                                    <th class="p-3 sm:p-4 font-black">Status</th>
+                                    <th class="p-3 sm:p-4 font-black text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm font-medium">
                                 <tr class="border-b border-[var(--border-color)] hover:bg-[var(--card-hover)] transition-colors">
-                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-089</td>
-                                    <td class="p-4">TechCorp</td>
-                                    <td class="p-4 font-bold text-[var(--text-main)]">$12,000</td>
-                                    <td class="p-4 text-[var(--text-muted)]">Nov 01, 2024</td>
-                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[#f59e0b]/10 text-[#f59e0b]">Pending</span></td>
-                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-main)] font-bold">INV-2024-089</td>
+                                    <td class="p-3 sm:p-4">TechCorp</td>
+                                    <td class="p-3 sm:p-4 font-bold text-[var(--text-main)]">$12,000</td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-muted)]">Nov 01, 2024</td>
+                                    <td class="p-3 sm:p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[#f59e0b]/10 text-[#f59e0b]">Pending</span></td>
+                                    <td class="p-3 sm:p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
                                 </tr>
                                 <tr class="border-b border-[var(--border-color)] hover:bg-[var(--card-hover)] transition-colors">
-                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-088</td>
-                                    <td class="p-4">Marcus T.</td>
-                                    <td class="p-4 font-bold text-[var(--text-main)]">$5,000</td>
-                                    <td class="p-4 text-[var(--text-muted)]">Oct 28, 2024</td>
-                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
-                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-main)] font-bold">INV-2024-088</td>
+                                    <td class="p-3 sm:p-4">Marcus T.</td>
+                                    <td class="p-3 sm:p-4 font-bold text-[var(--text-main)]">$5,000</td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-muted)]">Oct 28, 2024</td>
+                                    <td class="p-3 sm:p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
+                                    <td class="p-3 sm:p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
                                 </tr>
                                 <tr class="border-b border-[var(--border-color)] hover:bg-[var(--card-hover)] transition-colors">
-                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-087</td>
-                                    <td class="p-4">David O.</td>
-                                    <td class="p-4 font-bold text-[var(--text-main)]">$15,000</td>
-                                    <td class="p-4 text-[var(--text-muted)]">Oct 15, 2024</td>
-                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
-                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-main)] font-bold">INV-2024-087</td>
+                                    <td class="p-3 sm:p-4">David O.</td>
+                                    <td class="p-3 sm:p-4 font-bold text-[var(--text-main)]">$15,000</td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-muted)]">Oct 15, 2024</td>
+                                    <td class="p-3 sm:p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
+                                    <td class="p-3 sm:p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
                                 </tr>
                                 <tr class="hover:bg-[var(--card-hover)] transition-colors">
-                                    <td class="p-4 text-[var(--text-main)] font-bold">INV-2024-086</td>
-                                    <td class="p-4">Elena R.</td>
-                                    <td class="p-4 font-bold text-[var(--text-main)]">$8,500</td>
-                                    <td class="p-4 text-[var(--text-muted)]">Oct 01, 2024</td>
-                                    <td class="p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
-                                    <td class="p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-main)] font-bold">INV-2024-086</td>
+                                    <td class="p-3 sm:p-4">Elena R.</td>
+                                    <td class="p-3 sm:p-4 font-bold text-[var(--text-main)]">$8,500</td>
+                                    <td class="p-3 sm:p-4 text-[var(--text-muted)]">Oct 01, 2024</td>
+                                    <td class="p-3 sm:p-4"><span class="px-2 py-1 text-[9px] font-black uppercase tracking-widest rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)]">Paid</span></td>
+                                    <td class="p-3 sm:p-4 text-right"><button class="text-[var(--text-muted)] hover:text-[var(--text-main)]"><i class="fas fa-download"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -776,29 +782,31 @@
             document.querySelectorAll('.nav-item').forEach(el => {
                 if(el.id && el.id.startsWith('nav-')) el.classList.remove('active');
             });
-            document.getElementById('nav-' + sectionName).classList.add('active');
+            const activeNav = document.getElementById('nav-' + sectionName);
+            if(activeNav) activeNav.classList.add('active');
 
             // Hide the standalone sections by default
-            sectionSchedule.style.display = 'none';
-            sectionFinance.style.display = 'none';
+            if(sectionSchedule) sectionSchedule.style.display = 'none';
+            if(sectionFinance) sectionFinance.style.display = 'none';
 
             // Toggle Content Visibility & Layout
             if (sectionName === 'overview') {
                 overviewTop.style.display = 'block';
                 bottomGrid.style.display = 'grid'; 
-                bottomGrid.className = 'grid grid-cols-1 xl:grid-cols-3 gap-8'; 
+                // Restore responsive grid layout
+                bottomGrid.className = 'grid grid-cols-1 xl:grid-cols-3 gap-6 xl:gap-8 min-w-0'; 
                 sectionRoster.style.display = 'flex';
                 sectionPipeline.style.display = 'flex';
             } else if (sectionName === 'roster') {
                 overviewTop.style.display = 'none';
                 bottomGrid.style.display = 'block'; 
-                bottomGrid.className = 'block'; 
+                bottomGrid.className = 'block min-w-0'; 
                 sectionRoster.style.display = 'flex';
                 sectionPipeline.style.display = 'none';
             } else if (sectionName === 'pipeline') {
                 overviewTop.style.display = 'none';
                 bottomGrid.style.display = 'block'; 
-                bottomGrid.className = 'block'; 
+                bottomGrid.className = 'block min-w-0'; 
                 sectionRoster.style.display = 'none';
                 sectionPipeline.style.display = 'flex';
             } else if (sectionName === 'schedule') {

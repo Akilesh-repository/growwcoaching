@@ -201,11 +201,14 @@
 
         /* TOPBAR BUTTONS */
         .icon-btn {
-            width: 44px; height: 44px; border-radius: 12px;
+            width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             color: var(--text-muted); background: var(--card-bg); 
             border: 1px solid var(--border-color);
             cursor: pointer; transition: all 0.2s;
+        }
+        @media (min-width: 640px) {
+            .icon-btn { width: 44px; height: 44px; }
         }
         .icon-btn:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
 
@@ -214,7 +217,6 @@
             background-color: #09090b; 
             color: #ffffff; 
             border-radius: var(--radius);
-            padding: 48px;
             position: relative;
             overflow: hidden;
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
@@ -243,7 +245,7 @@
         [dir="rtl"] .clean-table { text-align: right; }
         .clean-table th, .clean-table td { white-space: nowrap; }
         
-        .clean-table th { padding: 16px; color: var(--text-muted); font-weight: 700; font-size: 0.75rem; background: var(--dash-bg); text-transform: uppercase; letter-spacing: 1px; }
+        .clean-table th { padding: 12px 16px; color: var(--text-muted); font-weight: 700; font-size: 0.75rem; background: var(--dash-bg); text-transform: uppercase; letter-spacing: 1px; }
         .clean-table th:first-child { border-radius: 8px 0 0 8px; }
         .clean-table th:last-child { border-radius: 0 8px 8px 0; }
         [dir="rtl"] .clean-table th:first-child { border-radius: 0 8px 8px 0; }
@@ -270,9 +272,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 145px; /* Fixed width to guarantee uniform size */
+            width: 145px; 
             height: 38px;
-            white-space: nowrap; /* Prevent wrapping */
+            white-space: nowrap; 
             box-sizing: border-box;
         }
         .btn-action { background: var(--accent-color); color: #000; border: 1px solid var(--accent-color); }
@@ -282,7 +284,8 @@
         .btn-disabled { background: var(--dash-bg); color: var(--text-muted); border: 1px solid var(--border-color); cursor: not-allowed; opacity: 0.6; }
 
         /* CHAT UI */
-        .chat-bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; max-width: 85%; }
+        .chat-bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; max-width: 90%; }
+        @media (min-width: 640px) { .chat-bubble { max-width: 85%; } }
         .chat-editor { background: var(--dash-bg); color: var(--text-main); border-bottom-left-radius: 2px; }
         .chat-author { background: var(--accent-color); color: #000; border-bottom-right-radius: 2px; margin-left: auto; }
         
@@ -300,10 +303,11 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     
     <aside class="sidebar" id="sidebar">
-        <div class="mb-12 px-4">
+        <div class="mb-12 px-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-black tracking-tighter block" style="color: var(--text-main); text-decoration: none;">
                 DoneCoaching
             </a>
+            <button class="lg:hidden text-[var(--text-muted)] hover:text-[var(--text-main)]" onclick="toggleSidebar()"><i class="fas fa-times text-xl"></i></button>
         </div>
         
         <nav class="flex-grow">
@@ -351,8 +355,8 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 md:gap-5">
-                <button class="icon-btn" id="rtl-toggle" title="Toggle RTL"><i class="fas fa-align-right"></i></button>
+            <div class="flex items-center gap-2 md:gap-4">
+                <button class="icon-btn hidden sm:flex" id="rtl-toggle" title="Toggle RTL"><i class="fas fa-align-right"></i></button>
                 <button class="icon-btn" id="theme-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
                 
                 <div class="relative cursor-pointer group">
@@ -364,12 +368,12 @@
 
                 <div class="w-px h-8 mx-1 bg-[var(--border-color)]"></div>
                 
-                <div class="flex items-center gap-3 cursor-pointer bg-[var(--card-bg)] border border-[var(--border-color)] pl-2 pr-4 py-1.5 rounded-full hover:border-[var(--text-main)] transition-colors">
+                <div class="flex items-center gap-2 sm:gap-3 cursor-pointer bg-[var(--card-bg)] border border-[var(--border-color)] p-1.5 sm:pl-2 sm:pr-4 sm:py-1.5 rounded-full hover:border-[var(--text-main)] transition-colors">
                     <img src="https://ui-avatars.com/api/?name=David+O&background=10B981&color=000&bold=true" alt="Client" class="w-8 h-8 rounded-full border border-[var(--border-color)]">
                     <div class="hidden md:block text-left">
                         <p class="text-sm font-bold text-[var(--text-main)] leading-tight">David O.</p>
                     </div>
-                    <i class="fas fa-chevron-down text-xs text-[var(--text-muted)] ml-2"></i>
+                    <i class="fas fa-chevron-down text-xs text-[var(--text-muted)] ml-1 hidden sm:block"></i>
                 </div>
             </div>
         </header>
@@ -378,69 +382,69 @@
             
             <div id="section-dashboard" class="block">
                 
-                <div class="hero-banner mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 p-8 md:p-12">
+                <div class="hero-banner p-6 sm:p-8 md:p-12 mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                     <div class="hero-banner-pattern"></div>
-                    <div class="relative z-10">
-                        <span class="inline-block border border-white/50 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4">Program Active</span>
-                        <h1 class="text-3xl md:text-4xl font-black mb-2 tracking-tight text-white">Phase 2: Operational Scaling</h1>
-                        <p class="text-gray-300 text-base max-w-xl font-medium">Your coach, <strong class="text-[var(--accent-color)]">Sarah Jenkins</strong>, has uploaded the new "Architecture of Delegation" framework to your vault.</p>
+                    <div class="relative z-10 w-full lg:w-auto">
+                        <span class="inline-block border border-white/50 text-white text-[10px] sm:text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-3 sm:mb-4">Program Active</span>
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl font-black mb-2 tracking-tight text-white leading-tight">Phase 2: Operational Scaling</h1>
+                        <p class="text-gray-300 text-sm sm:text-base max-w-xl font-medium">Your coach, <strong class="text-[var(--accent-color)]">Sarah Jenkins</strong>, has uploaded the new "Architecture of Delegation" framework to your vault.</p>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto relative z-10">
-                        <button class="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black px-6 py-3 font-bold text-sm uppercase tracking-wide transition-all rounded-md" onclick="showSection('vault')">View Framework</button>
-                        <button class="w-full sm:w-auto bg-[var(--accent-color)] hover:bg-[var(--accent-dark)] text-black border-2 border-[var(--accent-color)] hover:border-[var(--accent-dark)] px-6 py-3 font-bold text-sm uppercase tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 rounded-md">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full lg:w-auto relative z-10">
+                        <button class="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white hover:bg-white hover:text-black px-4 sm:px-6 py-3 font-bold text-xs sm:text-sm uppercase tracking-wide transition-all rounded-md text-center" onclick="showSection('vault')">View Framework</button>
+                        <button class="w-full sm:w-auto bg-[var(--accent-color)] hover:bg-[var(--accent-dark)] text-black border-2 border-[var(--accent-color)] hover:border-[var(--accent-dark)] px-4 sm:px-6 py-3 font-bold text-xs sm:text-sm uppercase tracking-wide shadow-lg transition-all flex items-center justify-center gap-2 rounded-md">
                             <i class="fas fa-calendar-plus"></i> Next Session: Oct 18
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-                    <div class="dash-card p-6 flex flex-col justify-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-8">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-center">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Program Progress</p>
                             <i class="fas fa-chart-line text-[var(--text-muted)]"></i>
                         </div>
-                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">68%</h3>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] mt-1">68%</h3>
                         <div class="mt-3">
                             <div class="progress-bg"><div class="progress-fill" style="width: 68%;"></div></div>
                             <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">Month 4 of 6</p>
                         </div>
                     </div>
 
-                    <div class="dash-card p-6 flex flex-col justify-center">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-center">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Live Hours Logged</p>
                             <i class="fas fa-clock text-[var(--text-muted)]"></i>
                         </div>
-                        <h3 class="text-3xl font-black text-[var(--text-main)] mt-1">18.5 <span class="text-lg text-[var(--text-muted)]">hrs</span></h3>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)] mt-1">18.5 <span class="text-base sm:text-lg text-[var(--text-muted)]">hrs</span></h3>
                         <div class="mt-3">
                             <div class="progress-bg"><div class="progress-fill" style="width: 45%; background-color: var(--text-main);"></div></div>
                             <p class="text-xs text-[var(--text-muted)] mt-2 font-medium">+2.0 hours this week</p>
                         </div>
                     </div>
 
-                    <div class="dash-card p-6 flex flex-col justify-between border-l-4 border-l-[var(--accent-color)]">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-between border-l-4 border-l-[var(--accent-color)]">
                         <div class="flex justify-between items-start mb-2">
                             <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)]">Pending Action</p>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-color);">Required</span>
                         </div>
-                        <h3 class="text-xl font-bold text-[var(--text-main)] mt-1">Phase 3 Assessment</h3>
+                        <h3 class="text-lg sm:text-xl font-bold text-[var(--text-main)] mt-1">Phase 3 Assessment</h3>
                         <p class="text-sm text-[var(--text-muted)] mt-1 line-clamp-1">Please complete the team performance evaluation form.</p>
                         <a href="#" class="text-[var(--accent-color)] font-bold text-sm mt-3 hover:underline flex items-center gap-1">Review & Submit <i class="fas fa-arrow-right text-xs"></i></a>
                     </div>
 
-                    <div class="dash-card p-6 flex items-center gap-4">
-                        <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Coach" class="w-16 h-16 rounded-full object-cover border-2 border-[var(--border-color)] object-top">
+                    <div class="dash-card p-5 sm:p-6 flex items-center gap-4">
+                        <img src="images/pexels-mikhail-nilov-6740171.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Sarah+Jenkins&background=random'" alt="Coach" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[var(--border-color)] object-top">
                         <div>
                             <p class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Lead Coach</p>
-                            <h3 class="text-lg font-bold text-[var(--text-main)] leading-tight">Sarah Jenkins</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-[var(--text-main)] leading-tight">Sarah Jenkins</h3>
                             <p class="text-xs text-[#10b981] font-bold mt-1 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online Now</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                     <div class="lg:col-span-2 dash-card flex flex-col min-w-0">
-                        <div class="p-6 border-b border-[var(--border-color)] flex justify-between items-center">
+                        <div class="p-5 sm:p-6 border-b border-[var(--border-color)] flex justify-between items-center">
                             <div>
                                 <h3 class="text-lg font-bold text-[var(--text-main)]">Recent Sessions</h3>
                             </div>
@@ -474,7 +478,7 @@
                         </div>
                     </div>
 
-                    <div class="dash-card flex flex-col h-[350px]">
+                    <div class="dash-card flex flex-col h-[400px] lg:h-[350px]">
                         <div class="p-4 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px] cursor-pointer" onclick="showSection('chat')">
                             <h3 class="font-bold text-[var(--text-main)] flex items-center gap-2">
                                 <i class="fas fa-comment-alt text-[var(--accent-color)]"></i> Coach Chat
@@ -495,80 +499,84 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="p-3 border-t border-[var(--border-color)] bg-[var(--card-bg)] rounded-b-[15px] flex items-center gap-2">
+                            <input type="text" placeholder="Type..." class="flex-grow bg-[var(--dash-bg)] border border-[var(--border-color)] rounded-full px-4 py-2 text-sm text-[var(--text-main)] outline-none">
+                            <button class="bg-[var(--text-main)] text-[var(--bg-color)] w-9 h-9 flex-shrink-0 rounded-full flex items-center justify-center"><i class="fas fa-paper-plane text-xs"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="section-vault" class="flex-col gap-6" style="display: none;">
-                <div class="flex justify-between items-end mb-2">
+            <div id="section-vault" class="flex-col gap-4 sm:gap-6" style="display: none;">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-2">
                     <div>
-                        <h3 class="text-2xl font-black text-[var(--text-main)]">Video Vault</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Video Vault</h3>
                         <p class="text-sm font-medium text-[var(--text-muted)] mt-1">Access your session replays and exclusive frameworks.</p>
                     </div>
-                    <div class="flex gap-2 border-b border-[var(--border-color)] pb-1">
+                    <div class="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-1 w-full md:w-auto">
                         <button class="text-sm font-bold text-[var(--accent-color)] border-b-2 border-[var(--accent-color)] pb-2 px-2">All Files</button>
                         <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Replays</button>
                         <button class="text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] pb-2 px-2 transition-colors">Frameworks</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
                     <div class="dash-card overflow-hidden">
                         <div class="video-thumb">
-                            <img src="images/pexels-pavel-danilyuk-6203641.jpg" alt="Video">
+                            <img src="images/pexels-pavel-danilyuk-6203641.jpg" onerror="this.src='https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800'" alt="Video">
                             <i class="fas fa-play-circle"></i>
                             <span class="duration-badge">45:20</span>
                         </div>
-                        <div class="p-5">
+                        <div class="p-4 sm:p-5">
                             <span class="text-[10px] font-black uppercase tracking-widest text-[var(--accent-color)] bg-[var(--accent-color)]/10 px-2 py-1 rounded mb-2 inline-block">New Framework</span>
                             <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight mb-2">The Architecture of Delegation</h4>
                             <p class="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">Learn how to build an organizational chart that scales your business without requiring your constant presence.</p>
-                            <button class="btn-outline w-full"><i class="fas fa-play mr-2"></i> Watch Now</button>
+                            <button class="btn-outline-table w-full py-2 rounded-md font-bold text-sm border hover:bg-[var(--dash-bg)] transition-colors"><i class="fas fa-play mr-2"></i> Watch Now</button>
                         </div>
                     </div>
 
                     <div class="dash-card overflow-hidden">
                         <div class="video-thumb">
-                            <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Video">
+                            <img src="images/pexels-mikhail-nilov-6740171.jpg" onerror="this.src='https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800'" alt="Video">
                             <i class="fas fa-play-circle"></i>
                             <span class="duration-badge">60:00</span>
                         </div>
-                        <div class="p-5">
+                        <div class="p-4 sm:p-5">
                             <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--dash-bg)] px-2 py-1 rounded mb-2 inline-block">Session Replay</span>
                             <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight mb-2">Session 2: The Energy Audit</h4>
                             <p class="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">Full recording of our September 24th strategy call identifying operational bottlenecks and energy drains.</p>
-                            <button class="btn-outline w-full"><i class="fas fa-play mr-2"></i> Watch Now</button>
+                            <button class="btn-outline-table w-full py-2 rounded-md font-bold text-sm border hover:bg-[var(--dash-bg)] transition-colors"><i class="fas fa-play mr-2"></i> Watch Now</button>
                         </div>
                     </div>
 
                     <div class="dash-card overflow-hidden">
                         <div class="video-thumb">
-                            <img src="images/pexels-nappy-935977.jpg" alt="Video">
+                            <img src="images/pexels-nappy-935977.jpg" onerror="this.src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800'" alt="Video">
                             <i class="fas fa-play-circle"></i>
                             <span class="duration-badge">52:14</span>
                         </div>
-                        <div class="p-5">
+                        <div class="p-4 sm:p-5">
                             <span class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] bg-[var(--dash-bg)] px-2 py-1 rounded mb-2 inline-block">Session Replay</span>
                             <h4 class="font-bold text-[var(--text-main)] text-lg leading-tight mb-2">Session 1: Vision Alignment</h4>
                             <p class="text-xs text-[var(--text-muted)] mb-4 line-clamp-2">Our kickoff session defining your 12-month goals, revenue targets, and expected coaching outcomes.</p>
-                            <button class="btn-outline w-full"><i class="fas fa-play mr-2"></i> Watch Now</button>
+                            <button class="btn-outline-table w-full py-2 rounded-md font-bold text-sm border hover:bg-[var(--dash-bg)] transition-colors"><i class="fas fa-play mr-2"></i> Watch Now</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="section-sessions" class="flex-col gap-6" style="display: none;">
-                <div class="flex justify-between items-end mb-2">
+            <div id="section-sessions" class="flex-col gap-4 sm:gap-6" style="display: none;">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-2">
                     <div>
-                        <h3 class="text-2xl font-black text-[var(--text-main)]">Master Session Log</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Master Session Log</h3>
                         <p class="text-sm font-medium text-[var(--text-muted)] mt-1">A complete history of your 1-on-1 coaching program.</p>
                     </div>
-                    <button class="btn-action !w-auto !px-6"><i class="fas fa-download"></i> Export Log</button>
+                    <button class="btn-action w-full sm:w-auto h-10 px-6 rounded-md font-bold text-sm"><i class="fas fa-download mr-2"></i> Export Log</button>
                 </div>
 
-                <div class="dash-card overflow-hidden w-full">
+                <div class="dash-card overflow-hidden w-full min-w-0">
                     <div class="overflow-x-auto w-full">
-                        <table class="clean-table w-full">
+                        <table class="clean-table min-w-[700px]">
                             <thead>
                                 <tr>
                                     <th>Session Focus</th>
@@ -607,105 +615,91 @@
                                     <td><span class="status-badge badge-info">Locked</span></td>
                                     <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
                                 </tr>
-                                <tr>
-                                    <td><span class="font-bold text-[var(--text-main)]">5. Scaling Systems</span></td>
-                                    <td>Nov 16, 2024</td>
-                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
-                                    <td><span class="status-badge badge-info">Locked</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="font-bold text-[var(--text-main)]">6. Graduation / Review</span></td>
-                                    <td>Dec 01, 2024</td>
-                                    <td><span class="text-[var(--text-muted)] text-sm">--</span></td>
-                                    <td><span class="status-badge badge-info">Locked</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-disabled" disabled><i class="fas fa-lock mr-2"></i> Locked</button></td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <div id="section-chat" class="flex-col h-full" style="display: none; height: calc(100vh - 150px);">
+            <div id="section-chat" class="flex-col h-full" style="display: none; height: calc(100dvh - 140px);">
                 <div class="dash-card flex flex-col h-full max-w-5xl mx-auto w-full">
-                    <div class="p-6 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px]">
-                        <div class="flex items-center gap-4">
-                            <img src="images/pexels-mikhail-nilov-6740171.jpg" alt="Coach" class="w-12 h-12 rounded-full object-cover border border-[var(--border-color)]">
+                    <div class="p-4 sm:p-6 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--dash-bg)] rounded-t-[15px]">
+                        <div class="flex items-center gap-3 sm:gap-4">
+                            <img src="images/pexels-mikhail-nilov-6740171.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Sarah+Jenkins&background=random'" alt="Coach" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border border-[var(--border-color)]">
                             <div>
-                                <h3 class="font-bold text-[var(--text-main)] text-lg">Sarah Jenkins</h3>
-                                <p class="text-xs text-[#10b981] font-bold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online</p>
+                                <h3 class="font-bold text-[var(--text-main)] text-base sm:text-lg">Sarah Jenkins</h3>
+                                <p class="text-[10px] sm:text-xs text-[#10b981] font-bold flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> Online</p>
                             </div>
                         </div>
-                        <div class="flex gap-3 text-[var(--text-muted)]">
-                            <button class="hover:text-[var(--text-main)] transition-colors"><i class="fas fa-phone-alt"></i></button>
-                            <button class="hover:text-[var(--text-main)] transition-colors"><i class="fas fa-video"></i></button>
+                        <div class="flex gap-4 sm:gap-3 text-[var(--text-muted)]">
+                            <button class="hover:text-[var(--text-main)] transition-colors text-lg sm:text-base"><i class="fas fa-phone-alt"></i></button>
+                            <button class="hover:text-[var(--text-main)] transition-colors text-lg sm:text-base"><i class="fas fa-video"></i></button>
                         </div>
                     </div>
                     
-                    <div class="flex-grow p-6 overflow-y-auto space-y-6 bg-[var(--bg-color)]">
+                    <div class="flex-grow p-4 sm:p-6 overflow-y-auto space-y-6 bg-[var(--bg-color)]">
                         <p class="text-center text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold">Yesterday</p>
                         
-                        <div class="flex flex-col items-start max-w-[80%]">
+                        <div class="flex flex-col items-start w-full sm:max-w-[80%]">
                             <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:22 PM</span>
-                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-base">
+                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-sm sm:text-base">
                                 David, incredible progress on your delegation targets this week. Remember the golden rule: Do only what only you can do.
                             </div>
                         </div>
                         
-                        <div class="flex flex-col items-start max-w-[80%]">
+                        <div class="flex flex-col items-start w-full sm:max-w-[80%]">
                             <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 14:23 PM</span>
-                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-base">
+                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-sm sm:text-base">
                                 Review the Architecture Framework I just unlocked before our call on the 18th. Let's map out your org chart together. Let me know if you have trouble finding it in the Video Vault.
                             </div>
                         </div>
 
-                        <div class="flex flex-col items-end max-w-[80%] ml-auto">
+                        <div class="flex flex-col items-end w-full sm:max-w-[80%] ml-auto">
                             <span class="text-[10px] text-[var(--text-muted)] mb-1 mr-1 font-bold">You • 15:45 PM</span>
-                            <div class="chat-bubble chat-author text-base">
+                            <div class="chat-bubble chat-author text-sm sm:text-base">
                                 Got it! I've already drafted a rough version on Miro. Will send it over shortly.
                             </div>
                         </div>
 
                         <p class="text-center text-[10px] uppercase tracking-widest text-[var(--text-muted)] font-bold mt-8">Today</p>
 
-                        <div class="flex flex-col items-start max-w-[80%]">
+                        <div class="flex flex-col items-start w-full sm:max-w-[80%]">
                             <span class="text-[10px] text-[var(--text-muted)] mb-1 ml-1 font-bold">Sarah (Coach) • 09:05 AM</span>
-                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-base">
+                            <div class="chat-bubble chat-editor border border-[var(--border-color)] text-sm sm:text-base">
                                 Sounds perfect. Looking forward to reviewing it!
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-4 border-t border-[var(--border-color)] bg-[var(--card-bg)] rounded-b-[15px] flex items-center gap-4">
-                        <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] p-2 transition-colors text-xl"><i class="fas fa-paperclip"></i></button>
-                        <input type="text" placeholder="Type your message..." class="flex-grow bg-[var(--dash-bg)] border border-[var(--border-color)] rounded-full px-6 py-3 text-base text-[var(--text-main)] outline-none focus:border-[var(--accent-color)] transition-colors">
-                        <button class="bg-[var(--text-main)] text-[var(--bg-color)] w-12 h-12 rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-white transition-colors"><i class="fas fa-paper-plane text-lg"></i></button>
+                    <div class="p-3 sm:p-4 border-t border-[var(--border-color)] bg-[var(--card-bg)] rounded-b-[15px] flex items-center gap-2 sm:gap-4">
+                        <button class="text-[var(--text-muted)] hover:text-[var(--text-main)] p-2 transition-colors text-lg sm:text-xl"><i class="fas fa-paperclip"></i></button>
+                        <input type="text" placeholder="Type your message..." class="flex-grow bg-[var(--dash-bg)] border border-[var(--border-color)] rounded-full px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base text-[var(--text-main)] outline-none focus:border-[var(--accent-color)] transition-colors">
+                        <button class="bg-[var(--text-main)] text-[var(--bg-color)] w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0 rounded-full flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-white transition-colors"><i class="fas fa-paper-plane text-base sm:text-lg"></i></button>
                     </div>
                 </div>
             </div>
 
-            <div id="section-billing" class="flex-col gap-6" style="display: none;">
-                <div class="flex justify-between items-end mb-2">
+            <div id="section-billing" class="flex-col gap-4 sm:gap-6" style="display: none;">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-2">
                     <div>
-                        <h3 class="text-2xl font-black text-[var(--text-main)]">Billing & Invoices</h3>
+                        <h3 class="text-xl sm:text-2xl font-black text-[var(--text-main)]">Billing & Invoices</h3>
                         <p class="text-sm font-medium text-[var(--text-muted)] mt-1">Manage your payment methods and download past receipts.</p>
                     </div>
-                    <button class="btn-outline !w-auto !px-6"><i class="fas fa-credit-card mr-2"></i> Update Card</button>
+                    <button class="btn-outline-table w-full sm:w-auto px-6 h-10 rounded-md font-bold text-sm border hover:bg-[var(--dash-bg)]"><i class="fas fa-credit-card mr-2"></i> Update Card</button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
-                    <div class="dash-card p-6 border-l-4 border-l-[var(--accent-color)]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-2">
+                    <div class="dash-card p-5 sm:p-6 border-l-4 border-l-[var(--accent-color)]">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Current Balance Due</p>
-                        <h3 class="text-3xl font-black text-[var(--text-main)]">$0.00</h3>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)]">$0.00</h3>
                         <p class="text-xs text-[var(--text-muted)] mt-2 font-bold"><i class="fas fa-check-circle text-[var(--accent-color)]"></i> Account in good standing</p>
                     </div>
-                    <div class="dash-card p-6">
+                    <div class="dash-card p-5 sm:p-6">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-1">Next Payment</p>
-                        <h3 class="text-3xl font-black text-[var(--text-main)]">$2,500</h3>
+                        <h3 class="text-2xl sm:text-3xl font-black text-[var(--text-main)]">$2,500</h3>
                         <p class="text-xs text-[var(--text-muted)] mt-2 font-bold">Processing on Nov 1, 2024</p>
                     </div>
-                    <div class="dash-card p-6 flex flex-col justify-center">
+                    <div class="dash-card p-5 sm:p-6 flex flex-col justify-center">
                         <p class="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-2">Active Payment Method</p>
                         <div class="flex items-center gap-3">
                             <div class="w-12 h-8 rounded bg-[var(--dash-bg)] border border-[var(--border-color)] flex items-center justify-center text-xl">
@@ -719,12 +713,12 @@
                     </div>
                 </div>
 
-                <div class="dash-card overflow-hidden">
-                    <div class="p-6 border-b border-[var(--border-color)]">
+                <div class="dash-card overflow-hidden min-w-0 w-full">
+                    <div class="p-5 sm:p-6 border-b border-[var(--border-color)]">
                         <h4 class="font-bold text-[var(--text-main)] text-lg">Payment History</h4>
                     </div>
                     <div class="overflow-x-auto w-full">
-                        <table class="clean-table w-full">
+                        <table class="clean-table min-w-[600px]">
                             <thead>
                                 <tr>
                                     <th>Invoice #</th>
@@ -742,15 +736,7 @@
                                     <td>Oct 01, 2024</td>
                                     <td class="font-bold text-[var(--text-main)]">$2,500.00</td>
                                     <td><span class="status-badge badge-success">Paid</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-12 !px-0"><i class="fas fa-download"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="font-bold text-[var(--text-main)]">INV-2024-0988</td>
-                                    <td>Monthly Retainer (Sep)</td>
-                                    <td>Sep 01, 2024</td>
-                                    <td class="font-bold text-[var(--text-main)]">$2,500.00</td>
-                                    <td><span class="status-badge badge-success">Paid</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-12 !px-0"><i class="fas fa-download"></i></button></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-10 !px-0"><i class="fas fa-download"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td class="font-bold text-[var(--text-main)]">INV-2024-0890</td>
@@ -758,7 +744,7 @@
                                     <td>Aug 15, 2024</td>
                                     <td class="font-bold text-[var(--text-main)]">$5,000.00</td>
                                     <td><span class="status-badge badge-success">Paid</span></td>
-                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-12 !px-0"><i class="fas fa-download"></i></button></td>
+                                    <td class="text-center"><button class="btn-sm btn-outline-table !w-10 !px-0"><i class="fas fa-download"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
