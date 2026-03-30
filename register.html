@@ -35,7 +35,7 @@
             --accent-dark: #059669; 
             --border-color: #e5e7eb;
             --input-bg: #f3f4f6;
-            --radius: 28px;
+            --radius: 24px;
             --shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.15);
         }
 
@@ -45,8 +45,8 @@
             --bg-card: #0a0a0a; 
             --text-main: #FFFFFF; 
             --text-muted: #9ca3af;
-            --accent-color: #A3E635; 
-            --accent-dark: #10B981; 
+            --accent-color: #10B981; 
+            --accent-dark: #059669; 
             --border-color: #1f2937;
             --input-bg: #111827;
             --shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
@@ -80,22 +80,22 @@
         [dir="rtl"] { text-align: right; }
         [dir="rtl"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
         [dir="rtl"] .mr-3 { margin-left: 0.75rem; margin-right: 0; }
-        [dir="rtl"] .input-icon { left: auto; right: 16px; }
-        [dir="rtl"] .input-field { padding: clamp(10px, 2vh, 14px) 44px clamp(10px, 2vh, 14px) 16px !important; }
+        [dir="rtl"] .input-icon { left: auto; right: 14px; }
+        [dir="rtl"] .input-field { padding: clamp(6px, 1.2vh, 10px) 36px clamp(6px, 1.2vh, 10px) 12px !important; }
         [dir="rtl"] .btn-icon { margin-left: 0; margin-right: 8px; transform: rotate(180deg); }
 
-        /* REGISTER CARD - MINIMIZED & MODERNIZED */
+        /* REGISTER CARD - HIGHLY COMPACT */
         .register-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: clamp(1.2rem, 3.5vh, 2.5rem) 2rem;
+            padding: clamp(1rem, 2.5vh, 1.8rem) clamp(1.2rem, 3vw, 1.8rem);
             width: 90%;
-            max-width: 400px;
+            max-width: 360px; /* Reduced to look better with stacked inputs */
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
-            gap: clamp(10px, 2vh, 20px); 
+            gap: clamp(8px, 1.5vh, 14px); 
             position: relative;
             z-index: 10;
             overflow: hidden !important; 
@@ -104,54 +104,47 @@
         /* HEADERS */
         .auth-logo { text-align: center; margin-bottom: 2px; }
         .auth-header { text-align: center; }
-        /* Changed header color to accent-color */
-        .auth-header h2 { font-size: clamp(1.2rem, 3vh, 1.5rem); font-weight: 900; color: var(--accent-color); margin-bottom: 2px; letter-spacing: -0.5px; }
-        .auth-header p { font-size: clamp(0.8rem, 1.8vh, 0.85rem); color: var(--text-muted); margin: 0; font-weight: 500; }
+        .auth-header h2 { font-size: clamp(1.1rem, 2.2vh, 1.3rem); font-weight: 900; color: var(--accent-color); margin-bottom: 2px; letter-spacing: -0.5px; }
+        .auth-header p { font-size: clamp(0.7rem, 1.5vh, 0.8rem); color: var(--text-muted); margin: 0; font-weight: 500; }
 
         /* FORM */
         form {
             display: flex;
             flex-direction: column;
-            gap: clamp(8px, 1.5vh, 14px); 
+            gap: clamp(6px, 1.2vh, 10px); 
             margin: 0;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: clamp(8px, 1vh, 12px);
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
         
-        .form-group label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); margin: 0; text-transform: uppercase; letter-spacing: 1px; padding-left: 4px; }
+        .form-group label { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); margin: 0; text-transform: uppercase; letter-spacing: 1px; padding-left: 4px; }
         
         .input-wrapper { position: relative; }
-        .input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.95rem; transition: color 0.3s; }
+        .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; transition: color 0.3s; pointer-events: none; }
         
-        /* Sleek borderless inputs */
+        /* Sleek borderless inputs - Minimized padding */
         .input-field {
             width: 100%;
-            padding: clamp(10px, 1.8vh, 14px) 16px clamp(10px, 1.8vh, 14px) 40px;
+            padding: clamp(6px, 1.2vh, 10px) 12px clamp(6px, 1.2vh, 10px) 36px;
             border: 2px solid transparent;
             background: var(--input-bg);
             color: var(--text-main);
-            border-radius: 12px;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
             font-weight: 500;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin: 0;
         }
         
-        /* Special padding for inputs without icons in the 2-col layout */
+        /* Special padding for inputs without icons */
         .input-field.no-icon {
-            padding-left: 16px !important;
+            padding-left: 12px !important;
         }
-        [dir="rtl"] .input-field.no-icon { padding-right: 16px !important; }
+        [dir="rtl"] .input-field.no-icon { padding-right: 12px !important; }
 
         .input-field:focus { 
             outline: none; 
@@ -164,32 +157,45 @@
             color: var(--accent-color); 
         }
 
+        /* TOGGLE PASSWORD ICON */
+        .toggle-password {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted); font-size: 0.85rem; cursor: pointer; transition: color 0.3s;
+        }
+        .toggle-password:hover { color: var(--accent-color); }
+        .input-field:focus ~ .toggle-password { color: var(--accent-color); }
+        .password-field { padding-right: 36px !important; }
+        
+        /* RTL for password icon */
+        [dir="rtl"] .toggle-password { right: auto; left: 14px; }
+        [dir="rtl"] .password-field { padding-left: 36px !important; padding-right: 36px !important; }
+
         .utility-row {
             display: flex;
             align-items: flex-start;
             margin: 0;
             padding: 0 4px;
-            gap: 8px;
+            gap: 6px;
         }
 
         /* CHECKBOX */
         input[type="checkbox"] {
             accent-color: var(--accent-color);
-            width: 14px;
-            height: 14px;
-            border-radius: 4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
             cursor: pointer;
             margin-top: 2px;
         }
 
-        /* BUTTONS - Pill Shape */
+        /* BUTTONS - Minimized */
         .auth-btn {
             width: 100%; 
-            padding: clamp(12px, 2.5vh, 14px);
+            padding: clamp(8px, 1.5vh, 12px);
             background: var(--accent-color);
             color: #ffffff; 
             border: none; border-radius: 999px;
-            font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
             cursor: pointer; transition: all 0.3s;
             margin-top: 2px;
             box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4);
@@ -199,17 +205,16 @@
         body.dark-mode .auth-btn { color: #000000; }
 
         /* DIVIDER */
-        .divider { text-align: center; position: relative; margin: 2px 0; }
+        .divider { text-align: center; position: relative; margin: 0; }
         .divider::before { content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 1px; background: var(--border-color); }
-        /* Changed divider text color to accent-color */
-        .divider span { position: relative; background: var(--bg-card); padding: 0 12px; color: var(--accent-color); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .divider span { position: relative; background: var(--bg-card); padding: 0 10px; color: var(--accent-color); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
 
         /* MINIMAL SOCIALS */
-        .social-login { display: flex; justify-content: center; gap: 16px; }
+        .social-login { display: flex; justify-content: center; gap: 12px; }
         .social-btn {
-            width: 40px; height: 40px;
+            width: 34px; height: 34px;
             border: 1px solid var(--border-color); border-radius: 50%; background: var(--input-bg);
-            font-size: 1rem; color: var(--text-main);
+            font-size: 0.9rem; color: var(--text-main);
             cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; align-items: center; justify-content: center;
         }
@@ -217,85 +222,56 @@
         body.dark-mode .social-btn:hover { color: #000; }
 
         /* FOOTER LINKS */
-        .login-link { text-align: center; font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+        .login-link { text-align: center; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
         .login-link a { color: var(--text-main); font-weight: 800; text-decoration: underline; text-decoration-color: var(--accent-color); text-underline-offset: 4px; transition: all 0.3s; }
         .login-link a:hover { color: var(--accent-color); }
 
         /* BOTTOM CONTROLS */
         .bottom-controls {
-            padding-top: clamp(8px, 1.5vh, 12px);
+            padding-top: clamp(6px, 1vh, 10px);
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
-        .toggle { width: 40px; height: 22px; background: var(--border-color); border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-        .toggle::before { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle { width: 36px; height: 20px; background: var(--border-color); border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
+        .toggle::before { content: ''; position: absolute; width: 14px; height: 14px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         body.dark-mode .toggle { background: var(--accent-color); border-color: transparent; }
-        body.dark-mode .toggle::before { left: 21px; background: #000; }
+        body.dark-mode .toggle::before { left: 19px; background: #000; }
         
-        .btn-text { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); background: var(--input-bg); border: 1px solid transparent; padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-text { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); background: var(--input-bg); border: 1px solid transparent; padding: 4px 10px; border-radius: 99px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
         .btn-text:hover { border-color: var(--accent-color); color: var(--text-main); }
 
         /* =========================================
            ULTRA-COMPACT MOBILE OPTIMIZATIONS 
            ========================================= */
         @media (max-width: 400px), (max-height: 750px) {
-            .register-card { padding: 1.2rem 1.5rem !important; gap: 12px !important; width: 95%; border-radius: 20px; }
-            .auth-logo { margin-bottom: 0 !important; }
-            .auth-logo a { font-size: 1.25rem !important; } 
-            .auth-header h2 { font-size: 1.15rem !important; margin-bottom: 0 !important; }
+            .register-card { padding: 1rem 1.2rem !important; gap: 10px !important; width: 95%; border-radius: 16px; }
+            .auth-logo a { font-size: 1.4rem !important; }
             .auth-header p { display: none !important; } 
-            
-            form { gap: 10px !important; }
-            .form-row { gap: 8px !important; }
-            .form-group { gap: 2px !important; }
-            .form-group label { font-size: 0.6rem !important; margin: 0 !important; }
-            
-            .input-field { padding: 8px 12px 8px 36px !important; font-size: 0.8rem !important; border-radius: 10px !important; height: 38px !important; }
-            .input-field.no-icon { padding-left: 12px !important; }
-            .input-icon { font-size: 0.85rem !important; left: 12px !important; }
-            
-            [dir="rtl"] .input-field { padding: 8px 36px 8px 12px !important; }
-            [dir="rtl"] .input-field.no-icon { padding-right: 12px !important; }
-            [dir="rtl"] .input-icon { right: 12px !important; left: auto !important; }
-            
-            .utility-row { margin: 0 !important; gap: 6px !important; }
-            .utility-row span { font-size: 0.65rem !important; line-height: 1.2; }
-            
-            .auth-btn { height: 38px !important; padding: 0 !important; font-size: 0.8rem !important; margin-top: 0 !important; border-radius: 10px !important; }
-            
-            .divider { margin: 0 !important; }
-            .divider span { font-size: 0.6rem !important; padding: 0 10px !important; }
-            
-            .social-login { gap: 10px !important; }
-            .social-btn { width: 36px !important; height: 36px !important; font-size: 0.9rem !important; }
-            
-            .login-link { font-size: 0.7rem !important; margin-bottom: 0 !important;}
-            
-            .bottom-controls { padding-top: 10px !important; gap: 16px !important; }
-            .toggle { width: 34px !important; height: 18px !important; }
-            .toggle::before { width: 12px !important; height: 12px !important; top: 3px !important; left: 3px !important; }
-            body.dark-mode .toggle::before { left: 19px !important; }
-            .btn-text { font-size: 0.6rem !important; padding: 4px 8px !important; }
+            form { gap: 8px !important; }
+            .input-field { padding: 6px 12px 6px 32px !important; height: 34px !important; border-radius: 8px !important; }
+            .input-icon, .toggle-password { font-size: 0.8rem !important; }
+            .auth-btn { height: 36px !important; padding: 0 !important; font-size: 0.75rem !important; border-radius: 8px !important; }
+            .utility-row span, .utility-row label { font-size: 0.6rem !important; line-height: 1.2; }
+            .social-btn { width: 30px !important; height: 30px !important; font-size: 0.85rem !important; }
+            .login-link { font-size: 0.65rem !important; margin-bottom: 0 !important;}
+            .bottom-controls { padding-top: 8px !important; }
         }
 
         /* EXTREME COMPACT MODE (e.g. 1024x600 landscape) */
         @media (max-height: 600px) {
-            .register-card { gap: 8px !important; padding: 10px 20px !important; }
-            form { gap: 8px !important; }
-            .form-row { gap: 6px !important; }
-            .input-field { padding: 6px 10px 6px 32px !important; font-size: 0.75rem !important; height: 34px !important; border-radius: 8px !important; }
-            .input-field.no-icon { padding-left: 10px !important; }
-            .input-icon { left: 10px !important; font-size: 0.75rem !important; }
-            .auth-btn { height: 34px !important; font-size: 0.75rem !important; border-radius: 8px !important; }
-            .social-btn { width: 30px !important; height: 30px !important; font-size: 0.8rem !important; }
-            
-            /* Hide non-essential elements to ensure form fits */
+            .register-card { gap: 6px !important; padding: 10px 16px !important; }
+            .auth-logo a { font-size: 1.2rem !important; }
+            form { gap: 6px !important; }
+            .form-group { gap: 0px !important; }
+            .input-field { height: 30px !important; font-size: 0.75rem !important; }
+            .auth-btn { height: 30px !important; font-size: 0.7rem !important; }
             .bottom-controls { display: none !important; } 
-            .auth-header p { display: none !important; }
+            .auth-header h2 { font-size: 1rem !important; }
+            .divider, .social-login { margin: 2px 0 !important; }
         }
     </style>
 </head>
@@ -307,7 +283,8 @@
     <div class="register-card">
 
         <div class="auth-logo">
-            <a href="index.html" class="text-2xl font-black tracking-tighter " style="text-decoration: none;">
+            <!-- Restored text-2xl class here -->
+            <a href="index.html" class="text-2xl font-black tracking-tighter" style="text-decoration: none; color: var(--text-main);">
                 DoneCoaching
             </a>
         </div>
@@ -319,18 +296,17 @@
 
         <form id="register-form">
             
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="firstName" class="input-field no-icon" placeholder="Sarah" required>
-                    </div>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="firstName" class="input-field no-icon" placeholder="Sarah" required>
                 </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="lastName" class="input-field no-icon" placeholder="Jenkins" required>
-                    </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="lastName" class="input-field no-icon" placeholder="Jenkins" required>
                 </div>
             </div>
 
@@ -342,20 +318,21 @@
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="password" class="input-field" placeholder="••••••••" required>
-                        <i class="fas fa-lock input-icon"></i>
-                    </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" class="input-field password-field" placeholder="••••••••" required>
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" id="toggle-password"></i>
                 </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="confirmPassword" class="input-field" placeholder="••••••••" required>
-                        <i class="fas fa-lock input-icon"></i>
-                    </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="confirmPassword" class="input-field password-field" placeholder="••••••••" required>
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" id="toggle-confirm-password"></i>
                 </div>
             </div>
 
@@ -425,6 +402,23 @@
             localStorage.setItem('dir', isRTL ? 'ltr' : 'rtl');
             rtlToggle.innerText = isRTL ? 'RTL MODE' : 'LTR MODE';
         };
+
+        // --- TOGGLE PASSWORD VISIBILITY ---
+        function setupPasswordToggle(inputId, toggleId) {
+            const toggleBtn = document.getElementById(toggleId);
+            const inputField = document.getElementById(inputId);
+
+            toggleBtn.addEventListener('click', () => {
+                const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+                inputField.setAttribute('type', type);
+                
+                toggleBtn.classList.toggle('fa-eye');
+                toggleBtn.classList.toggle('fa-eye-slash');
+            });
+        }
+
+        setupPasswordToggle('password', 'toggle-password');
+        setupPasswordToggle('confirmPassword', 'toggle-confirm-password');
 
         // --- FORM SUBMISSION ---
         document.getElementById('register-form').addEventListener('submit', (e) => {
