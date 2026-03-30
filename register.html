@@ -57,8 +57,7 @@
             color: var(--text-main);
             transition: background-color 0.3s, color 0.3s;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column; /* Stack top bar and main content */
             position: relative;
         }
 
@@ -83,6 +82,52 @@
         [dir="rtl"] .input-icon { left: auto; right: 14px; }
         [dir="rtl"] .input-field { padding: clamp(6px, 1.2vh, 10px) 36px clamp(6px, 1.2vh, 10px) 12px !important; }
         [dir="rtl"] .btn-icon { margin-left: 0; margin-right: 8px; transform: rotate(180deg); }
+
+        /* =========================================
+           TOP CONTROLS BAR
+           ========================================= */
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end; /* Automatically aligns to left in RTL mode */
+            align-items: center;
+            padding: 1rem 1.5rem;
+            gap: 1.5rem;
+            z-index: 50;
+        }
+
+        .toggle { 
+            width: 42px; height: 24px; 
+            background: var(--border-color); 
+            border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; 
+            flex-shrink: 0; 
+        }
+        .toggle::before { 
+            content: ''; position: absolute; width: 18px; height: 18px; 
+            background: white; border-radius: 50%; top: 3px; left: 3px; 
+            transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+        }
+        body.dark-mode .toggle { background: var(--accent-color); border-color: transparent; }
+        body.dark-mode .toggle::before { left: 21px; background: #000; }
+        
+        .top-btn-text { 
+            font-size: 0.7rem; font-weight: 800; color: var(--text-muted); 
+            background: transparent; border: 2px solid var(--text-muted); 
+            padding: 6px 12px; border-radius: 99px; cursor: pointer; transition: 0.2s; 
+            text-transform: uppercase; letter-spacing: 1px; 
+        }
+        .top-btn-text:hover { 
+            background: var(--text-muted); color: var(--bg-color); border-color: var(--text-muted);
+        }
+
+        /* MAIN WRAPPER (Prevents overlap by filling remaining height) */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
 
         /* REGISTER CARD - HIGHLY COMPACT */
         .register-card {
@@ -226,28 +271,11 @@
         .login-link a { color: var(--text-main); font-weight: 800; text-decoration: underline; text-decoration-color: var(--accent-color); text-underline-offset: 4px; transition: all 0.3s; }
         .login-link a:hover { color: var(--accent-color); }
 
-        /* BOTTOM CONTROLS */
-        .bottom-controls {
-            padding-top: clamp(6px, 1vh, 10px);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .toggle { width: 36px; height: 20px; background: var(--border-color); border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-        .toggle::before { content: ''; position: absolute; width: 14px; height: 14px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        body.dark-mode .toggle { background: var(--accent-color); border-color: transparent; }
-        body.dark-mode .toggle::before { left: 19px; background: #000; }
-        
-        .btn-text { font-size: 0.6rem; font-weight: 800; color: var(--text-muted); background: var(--input-bg); border: 1px solid transparent; padding: 4px 10px; border-radius: 99px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-text:hover { border-color: var(--accent-color); color: var(--text-main); }
-
         /* =========================================
            ULTRA-COMPACT MOBILE OPTIMIZATIONS 
            ========================================= */
         @media (max-width: 400px), (max-height: 750px) {
+            .top-bar { padding: 0.8rem 1rem; gap: 1rem; }
             .register-card { padding: 1rem 1.2rem !important; gap: 10px !important; width: 95%; border-radius: 16px; }
             .auth-logo a { font-size: 1.4rem !important; }
             .auth-header p { display: none !important; } 
@@ -258,18 +286,17 @@
             .utility-row span, .utility-row label { font-size: 0.6rem !important; line-height: 1.2; }
             .social-btn { width: 30px !important; height: 30px !important; font-size: 0.85rem !important; }
             .login-link { font-size: 0.65rem !important; margin-bottom: 0 !important;}
-            .bottom-controls { padding-top: 8px !important; }
         }
 
         /* EXTREME COMPACT MODE (e.g. 1024x600 landscape) */
         @media (max-height: 600px) {
+            .top-bar { padding: 0.5rem 1rem; }
             .register-card { gap: 6px !important; padding: 10px 16px !important; }
             .auth-logo a { font-size: 1.2rem !important; }
             form { gap: 6px !important; }
             .form-group { gap: 0px !important; }
             .input-field { height: 30px !important; font-size: 0.75rem !important; }
             .auth-btn { height: 30px !important; font-size: 0.7rem !important; }
-            .bottom-controls { display: none !important; } 
             .auth-header h2 { font-size: 1rem !important; }
             .divider, .social-login { margin: 2px 0 !important; }
         }
@@ -280,93 +307,96 @@
     <div class="bg-glow-1"></div>
     <div class="bg-glow-2"></div>
 
-    <div class="register-card">
-
-        <div class="auth-logo">
-            <!-- Restored text-2xl class here -->
-            <a href="index.html" class="text-2xl font-black tracking-tighter" style="text-decoration: none; color: var(--text-main);">
-                DoneCoaching
-            </a>
+    <!-- NEW TOP CONTROLS -->
+    <div class="top-bar">
+        <div class="flex items-center gap-2" style="cursor: pointer;" onclick="document.getElementById('theme-toggle').click()">
+            <i class="fas fa-sun text-xs" style="color: var(--text-muted); transition: color 0.3s;"></i>
+            <div class="toggle" id="theme-toggle"></div>
+            <i class="fas fa-moon text-xs" style="color: var(--text-muted); transition: color 0.3s;"></i>
         </div>
+        <button id="rtl-toggle" class="top-btn-text">RTL Mode</button>
+    </div>
 
-        <div class="auth-header">
-            <h2>Apply for Coaching</h2>
-            <p>Create your private workspace account.</p>
+    <!-- MAIN REGISTRATION WRAPPER -->
+    <div class="main-wrapper">
+        <div class="register-card">
+
+            <div class="auth-logo">
+                <a href="index.html" class="text-2xl font-black tracking-tighter" style="text-decoration: none; color: var(--text-main);">
+                    DoneCoaching
+                </a>
+            </div>
+
+            <div class="auth-header">
+                <h2>Apply for Coaching</h2>
+                <p>Create your private workspace account.</p>
+            </div>
+
+            <form id="register-form">
+                
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="firstName" class="input-field no-icon" placeholder="Sarah" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="lastName" class="input-field no-icon" placeholder="Jenkins" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" class="input-field" placeholder="executive@company.com" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="input-field password-field" placeholder="••••••••" required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <i class="fas fa-eye toggle-password" id="toggle-password"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmPassword" class="input-field password-field" placeholder="••••••••" required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <i class="fas fa-eye toggle-password" id="toggle-confirm-password"></i>
+                    </div>
+                </div>
+
+                <div class="utility-row">
+                    <input type="checkbox" id="terms" class="flex-shrink-0 border-gray-300 cursor-pointer" required>
+                    <label for="terms" class="text-xs font-medium" style="color: var(--text-muted); cursor: pointer; text-transform: none; letter-spacing: normal;">
+                        I agree to the <a href="#" style="color: var(--text-main); font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent-color);">Terms of Service</a> &amp; <a href="#" style="color: var(--text-main); font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent-color);">Privacy Policy</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="auth-btn">Create Account <i class="fas fa-arrow-right ml-2 btn-icon"></i></button>
+            </form>
+
+            <div class="divider"><span>Or Register With</span></div>
+
+            <div class="social-login">
+                <button class="social-btn" type="button" title="Sign up with Google"><i class="fab fa-google"></i></button>
+                <button class="social-btn" type="button" title="Sign up with Apple"><i class="fab fa-apple"></i></button>
+                <button class="social-btn" type="button" title="Sign up with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Log In Here</a>
+            </div>
+
         </div>
-
-        <form id="register-form">
-            
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <div class="input-wrapper">
-                    <input type="text" id="firstName" class="input-field no-icon" placeholder="Sarah" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <div class="input-wrapper">
-                    <input type="text" id="lastName" class="input-field no-icon" placeholder="Jenkins" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <div class="input-wrapper">
-                    <input type="email" id="email" class="input-field" placeholder="executive@company.com" required>
-                    <i class="fas fa-envelope input-icon"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="input-wrapper">
-                    <input type="password" id="password" class="input-field password-field" placeholder="••••••••" required>
-                    <i class="fas fa-lock input-icon"></i>
-                    <i class="fas fa-eye toggle-password" id="toggle-password"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <div class="input-wrapper">
-                    <input type="password" id="confirmPassword" class="input-field password-field" placeholder="••••••••" required>
-                    <i class="fas fa-lock input-icon"></i>
-                    <i class="fas fa-eye toggle-password" id="toggle-confirm-password"></i>
-                </div>
-            </div>
-
-            <div class="utility-row">
-                <input type="checkbox" id="terms" class="flex-shrink-0 border-gray-300 cursor-pointer" required>
-                <label for="terms" class="text-xs font-medium" style="color: var(--text-muted); cursor: pointer; text-transform: none; letter-spacing: normal;">
-                    I agree to the <a href="#" style="color: var(--text-main); font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent-color);">Terms of Service</a> &amp; <a href="#" style="color: var(--text-main); font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent-color);">Privacy Policy</a>.
-                </label>
-            </div>
-
-            <button type="submit" class="auth-btn">Create Account <i class="fas fa-arrow-right ml-2 btn-icon"></i></button>
-        </form>
-
-        <div class="divider"><span>Or Register With</span></div>
-
-        <div class="social-login">
-            <button class="social-btn" type="button" title="Sign up with Google"><i class="fab fa-google"></i></button>
-            <button class="social-btn" type="button" title="Sign up with Apple"><i class="fab fa-apple"></i></button>
-            <button class="social-btn" type="button" title="Sign up with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
-        </div>
-
-        <div class="login-link">
-            Already have an account? <a href="login.html">Log In Here</a>
-        </div>
-
-        <div class="bottom-controls">
-            <div class="flex items-center gap-2" style="cursor: pointer;" onclick="document.getElementById('theme-toggle').click()">
-                <i class="fas fa-sun text-xs" style="color: var(--text-muted);"></i>
-                <div class="toggle" id="theme-toggle"></div>
-                <i class="fas fa-moon text-xs" style="color: var(--text-muted);"></i>
-            </div>
-            <button id="rtl-toggle" class="btn-text">RTL Mode</button>
-        </div>
-
     </div>
 
     <script>
